@@ -130,7 +130,7 @@ body {
   cursor: pointer;
 }
 .chip.is-active { background: var(--navy); color: var(--on-navy); border-color: var(--navy); }
-.chip:disabled { opacity: .45; cursor: not-allowed; text-decoration: line-through; }
+.chip:disabled { opacity: .45; cursor: not-allowed; }
 #search {
   flex: 0 1 220px;
   min-width: 160px;
