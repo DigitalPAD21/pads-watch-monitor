@@ -1,0 +1,66 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>PAD's Watch Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<header class="site-header">
+  <div class="wrap">
+    <h1 class="title">PAD's Watch Monitor</h1>
+    <nav class="tabs" role="tablist">
+      <button class="tab is-active" data-view="stats" role="tab" aria-selected="true">2026</button>
+      <button class="tab" data-view="about" role="tab" aria-selected="false">Despre Proiect</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap content">
+  <section id="view-stats" class="view">
+    <div class="intro">
+      <h2>Lansările brandurilor de ceasuri în 2026</h2>
+      <p class="muted">Numărul de lansări per brand, după sursele monitorizate.</p>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="controls">
+      <div class="chips" id="source-chips"></div>
+      <input type="search" id="search" placeholder="Caută brand…" aria-label="Caută brand">
+    </div>
+
+    <p class="source-note muted" id="source-note"></p>
+    <ol class="brand-list" id="brand-list"></ol>
+  </section>
+
+  <section id="view-about" class="view" hidden>
+    <div class="intro">
+      <h2>Despre Proiect</h2>
+    </div>
+    <div class="about">
+      <p><strong>PAD's Watch Monitor</strong> adună într-un singur loc știrile despre lansările din lumea ceasurilor. Prima versiune arată o statistică a lansărilor din 2026, pe branduri.</p>
+
+      <h3>Surse</h3>
+      <ul class="source-table" id="source-table"></ul>
+
+      <h3>Metodologie</h3>
+      <ul>
+        <li>O „lansare” înseamnă un model nou sau o variantă nouă prezentată în 2026, așa cum apare în sursă.</li>
+        <li>Pe The Watch Pages, referințele care diferă doar prin variantă (de exemplu aceeași denumire de model) au fost comasate într-o singură lansare.</li>
+        <li>Pe Monochrome Watches au fost excluse interviurile, știrile din industrie, ghidurile și editorialele; articolele repetate despre același ceas au fost numărate o singură dată.</li>
+        <li>Numele brandurilor au fost normalizate (de exemplu „IWC Schaffhausen” → „IWC”, „BVLGARI” → „Bulgari”).</li>
+        <li>Vizualizarea „Toate sursele” adună numerele din fiecare sursă. Același ceas poate fi prezent în mai multe surse, deci totalul arată cât de prezent a fost un brand în presă, nu numărul de modele unice.</li>
+      </ul>
+      <p class="muted">Date colectate pe 21 octombrie 2026.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 PAD's Watch Monitor</span>
+    <span class="muted">Date agregate din surse publice · actualizat 21.10.2026</span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
