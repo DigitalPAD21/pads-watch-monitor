@@ -343,6 +343,16 @@ $("brand-filters").addEventListener("click", e => {
 });
 $("search").addEventListener("input", e => { query = e.target.value; renderList(); });
 
+// Butonul „Înapoi sus” apare după ce pagina a coborât peste un ecran.
+const toTop = $("to-top");
+const updateToTop = () => { toTop.hidden = window.scrollY < window.innerHeight * 0.8; };
+window.addEventListener("scroll", updateToTop, { passive: true });
+toTop.addEventListener("click", () => {
+  const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ top: 0, behavior: smooth ? "smooth" : "auto" });
+});
+updateToTop();
+
 renderChips();
 renderList();
 renderSources();
