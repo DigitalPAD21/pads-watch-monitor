@@ -1,0 +1,14 @@
+{
+ "source": "Professional Watches",
+ "listingUrls": [
+  "https://professionalwatches.com/wp-json/wp/v2/posts?after=2026-01-01T00:00:00&per_page=100&_embed"
+ ],
+ "pagesRead": 1,
+ "itemsSeen": 81,
+ "releases": 36,
+ "excluded": 45,
+ "withRefs": 21,
+ "dateRange": "2026-01-12 to 2026-10-07",
+ "complete": true,
+ "notes": "REST API returned all 81 2026 posts (x-wp-total 81). Releases chosen by title/tags/content judgment; excluded news, business, opinion, celebrity wrist-shots, retail, clocks, vintage, apparel, hands-on of older watches (Chopard XP Urushi), Kurono Tokyo feature. Refs regex-extracted from REST content only (no article pages fetched); brand/model left empty (no structured field). Borderline included: Royal Pop teaser post and Royal Pop post both listed."
+}

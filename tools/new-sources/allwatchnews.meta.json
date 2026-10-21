@@ -1,0 +1,15 @@
+{
+ "source": "All Watch News",
+ "listingUrls": [
+  "https://allwatchnews.com/",
+  "https://api.allwatchnews.com/latest?after=<last-article-id> (the \"More Stories\" endpoint, paged 137 times)"
+ ],
+ "pagesRead": 138,
+ "itemsSeen": 6164,
+ "releases": 3093,
+ "excluded": 3071,
+ "withRefs": 0,
+ "dateRange": "2026-01-01 to 2026-10-16",
+ "complete": true,
+ "notes": "allwatchnews.com is a Jekyll aggregator (no WordPress API/sitemap) linking to 15 external watch publications; it has no article pages of its own, so url is the original publication article URL and category is \"Aggregator: <publication>\". All 2026 items (6164 from 2026-01-01 to 2026-10-21) were pulled via its public More-Stories JSON endpoint until 2025-12-22. Release vs excluded was decided by title keyword heuristics only (inclusion: introducing/new/launches/unveils/debuts/edition/hands-on etc.; exclusion: review/podcast/best/guide/vs/why/how/interview/business/auction/etc., and \"New releases from X, Y and more\" roundups), so some false positives (e.g. hands-on of pre-2026 watches, news items) and false negatives (releases with neutral titles) remain. Brand/model left empty (no structured fields); refs not extracted because articles are external and releases exceed ~600."
+}

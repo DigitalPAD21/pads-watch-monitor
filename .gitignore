@@ -1,2 +1,5 @@
 dist/
 *.zip
+tools/raw/
+tools/new-sources/raw-*/
+tools/titles/new/

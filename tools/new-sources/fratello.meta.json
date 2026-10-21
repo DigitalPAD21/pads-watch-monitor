@@ -1,0 +1,14 @@
+{
+ "source": "Fratello",
+ "listingUrls": [
+  "https://www.fratellowatches.com/wp-json/wp/v2/posts/?after=2026-01-01T00:00:00&per_page=100&page=1..10&_embed (category 'Watch Releases', tag 'Watch Releases 2026')"
+ ],
+ "pagesRead": 10,
+ "itemsSeen": 960,
+ "releases": 570,
+ "excluded": 26,
+ "withRefs": 91,
+ "dateRange": "2026-01-06 to 2026-10-21",
+ "complete": true,
+ "notes": "WordPress REST API, all 960 posts since 2026-01-01 (10 pages x100). Release = category 'Watch Releases' OR tag 'Watch Releases 2026' OR Hands-On with tag Watches and Wonders 2026/Geneva Watch Days 2026/LVMH Watch Week. Excluded (counted in excluded, only among those candidates): Top 5/favorites/roundup lists, Sunday Morning Showdown, Watch Talk-only, events, manufacture visits, items tagged only 'Watch Releases 2025'. Other 365 posts not candidates (podcasts, showdowns, reviews, untagged hands-ons of mostly older watches, ~38 untagged Hands-On posts, some may be 2026 novelties but are unmarked). Fratello has no structured spec box: refs are regex-extracted from 'ref./reference X' mentions in title + first 3000 chars of article text (from REST content, no page fetches), so coverage is partial. brand filled only when exactly one watchbrands taxonomy term; model empty. Image is featured media source_url."
+}

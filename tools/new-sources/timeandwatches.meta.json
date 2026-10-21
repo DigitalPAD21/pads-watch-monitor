@@ -1,0 +1,14 @@
+{
+ "source": "Time and Watches",
+ "listingUrls": [
+  "https://www.timeandwatches.com/feeds/posts/default?alt=json (Blogger feed, monthly published-min/max windows)"
+ ],
+ "pagesRead": 16,
+ "itemsSeen": 336,
+ "releases": 313,
+ "excluded": 23,
+ "withRefs": 220,
+ "dateRange": "2026-01-02 to 2026-10-21",
+ "complete": true,
+ "notes": "Blogger JSON feed; all 336 posts of 2026 obtained via monthly windows (start-index pagination alone missed 13). Release = post carrying label 'new watches' (313); excluded 23 = industry news, features, interviews, auctions, exhibitions without that label. Brand/model left empty (labels mix brand, collection and topic tags). Article pages not fetched; no spec boxes exist, so refs were extracted by regex from feed body text/img alt where prose says 'reference/ref.' followed by a code containing a digit; refs are partial and only present when mentioned in prose."
+}

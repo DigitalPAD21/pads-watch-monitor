@@ -1,0 +1,20 @@
+const fs=require('fs');
+const a=require('../raw-allwatchnews/all.json').filter(x=>x.date>=Date.parse('2026-01-01T00:00:00Z')&&x.date<Date.parse('2026-10-22T00:00:00Z'));
+const EX=/\b(review(ed|s)?|podcast|best|guide|vs\.?|versus|showdown|why|how|top \d|top (five|ten|three)|weekend|last week|this week|week in|week's|friday|sunday|interview|talks|ceo|auction|buying|picks|what|opinion|editorial|insight|explained|history|column|spotlight|roundup|round-up|video|episode|q&a|should|worth|is it|are you|ranked|ranking|favou?rites?|comparison|compared|versus|deal|sale|strap|straps|clock|clocks|car|porsche|ferrari|sneaker|jewel(l)?ery|coffee|pen|knife|bag|sunglasses|wonders (recap|day)|recap|loupe|happenings|giveaway|perspective|grinding gears|quarter|hot take|favourites|identifying|new releases from|live blog|thoughts|diary|journal|essay|lessons|stories|business of|market|prices?|investment|collecting|collector|vintage guide|trip|travel|festival|exhibition|museum|workshop|interviews?|conversation|visit|behind|meet |profile|anniversary of the brand|ownership|long-term|wrist time|years? (with|later)|owning|reflections?|shop|dealer|retail|boutique|appoint|acquir|merger|lawsuit|tariff|layoff|sales|results|figures|exports?|report)\b/i;
+const ROUND=/^(from the editor|industry news|new releases from|the best|best |our |your |fratello.s top|top \d)/i;
+const INC=/\b(introduc(ing|es|ed)|new|launch(es|ed)?|unveil(s|ed)?|reveal(s|ed)?|announce(s|d)?|debut(s|ed)?|present(s|ed)?|releases?|released|return(s|ed)?|revive(s|d)?|brings?|goes|gets|adds?|edition|editions|limited|collection|hands[- ]on|first look|live pics|celebrates?|marks?|updates?|expands?|tribute|anniversary|joins|teams up|collaborat\w*|partner\w*|reimagin\w*|reinterpret\w*|redesign\w*|refresh\w*|takes|turns|makes|offers|drops|arrives?|honou?rs?|commemorat\w*|pays)\b/i;
+const out=[],ex=[];
+for(const x of a){
+ const t=x.title;
+ const SUM=/(new|introducw*|launchw*|unveilw*|limited|edition|revealw*|debutw*|releasw*|announcw*|latest|collection|variant|version)/i;
+ const ok=(INC.test(t)||SUM.test(x.summary||''))&&!EX.test(t.replace(/hands[- ]on/ig,'HO'))&&!ROUND.test(t);
+ (ok?out:ex).push(x);
+}
+const rel=out.map(x=>({title:x.title,url:x.url,img:x.imageUrl||'',date:new Date(x.date).toISOString().slice(0,10),category:'Aggregator: '+x.sourceTitle,brand:'',model:'',refs:[]}));
+fs.writeFileSync('allwatchnews.json',JSON.stringify(rel,null,1));
+const ds=rel.map(r=>r.date).sort();
+fs.writeFileSync('allwatchnews.meta.json',JSON.stringify({source:'All Watch News',listingUrls:['https://allwatchnews.com/','https://api.allwatchnews.com/latest?after=<last-article-id> (the "More Stories" endpoint, paged 137 times)'],pagesRead:138,itemsSeen:a.length,releases:rel.length,excluded:ex.length,withRefs:0,dateRange:ds[0]+' to '+ds[ds.length-1],complete:true,
+notes:'allwatchnews.com is a Jekyll aggregator (no WordPress API/sitemap) linking to 15 external watch publications; it has no article pages of its own, so url is the original publication article URL and category is "Aggregator: <publication>". All 2026 items (6164 from 2026-01-01 to 2026-10-21) were pulled via its public More-Stories JSON endpoint until 2025-12-22. Release vs excluded was decided by title keyword heuristics only (inclusion: introducing/new/launches/unveils/debuts/edition/hands-on etc.; exclusion: review/podcast/best/guide/vs/why/how/interview/business/auction/etc., and "New releases from X, Y and more" roundups), so some false positives (e.g. hands-on of pre-2026 watches, news items) and false negatives (releases with neutral titles) remain. Brand/model left empty (no structured fields); refs not extracted because articles are external and releases exceed ~600.'},null,1));
+console.log(a.length,rel.length,ex.length,rel[0].date,rel[rel.length-1].date);
+fs.writeFileSync('raw-allwatchnews/excluded.txt',ex.map(x=>x.sourceTitle+' | '+x.title).join('\n'));
+fs.writeFileSync('raw-allwatchnews/included.txt',out.map(x=>x.sourceTitle+' | '+x.title).join('\n'));

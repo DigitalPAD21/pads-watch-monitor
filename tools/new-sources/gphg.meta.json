@@ -1,0 +1,14 @@
+{
+ "source": "Grand Prix d'Horlogerie de Genève (GPHG 2026 nominated timepieces)",
+ "listingUrls": [
+  "https://www.gphg.org/en/gphg-2026/nominated-timepieces"
+ ],
+ "pagesRead": 79,
+ "itemsSeen": 84,
+ "releases": 78,
+ "excluded": 6,
+ "withRefs": 72,
+ "dateRange": "2025-06-01 .. 2026-10-01 (launch month from detail page, day set to 01)",
+ "complete": true,
+ "notes": "Next.js page; entries parsed from embedded RSC payload (14 categories x 6 nominees = 84). Excluded the 6 'Mechanical Clock' nominees (clocks). All 78 watches kept as 2026 competition entries even though some have launch dates of 2025 (Jun-Nov 2025) per detail page. Dates are the 'Launch date' month (MM/YYYY) with day 01, so approximate. Refs taken from 'Reference' field on each detail page; removed 6 values that are not references (Titanium, Silver, Time Jumper - Stainless Steel, DC6 Night Forest, Tourbillon 30s, 37.06). Some refs are SKU-like or have prefixes (e.g. '#BL140...', 'SKU 76537801' for Tiffany). Category labels are GPHG prize categories as shown (e.g. 'Complication', 'Time Only'), without Men's/Ladies' prefix since the site doesn't use one."
+}

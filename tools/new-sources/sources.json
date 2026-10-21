@@ -1,0 +1,20 @@
+[
+  { "id": "gphg", "name": "GPHG 2026", "url": "https://www.gphg.org/en/gphg-2026/nominated-timepieces",
+    "note": "Ceasurile nominalizate la Grand Prix d'Horlogerie de Genève 2026 (84 de nominalizări în 14 categorii). Sunt excluse cele 6 pendule și ceasurile cu data de lansare din 2025. Referințele vin din pagina fiecărei nominalizări." },
+  { "id": "abtw", "name": "aBlogtoWatch", "url": "https://www.ablogtowatch.com/",
+    "note": "Toate cele 690 de articole din 2026, citite prin API-ul site-ului. Sunt păstrate lansările (eticheta „Watch Releases 2026”, categoriile Watch Releases și Hands-On); recenziile ceasurilor mai vechi, listele și știrile sunt excluse." },
+  { "id": "fratello", "name": "Fratello", "url": "https://www.fratellowatches.com/",
+    "note": "Toate cele 960 de articole din 2026, citite prin API-ul site-ului. Sunt păstrate articolele din categoria Watch Releases, cele etichetate „Watch Releases 2026” și hands-on-urile de la Watches and Wonders, Geneva Watch Days și LVMH Watch Week." },
+  { "id": "watchtime", "name": "WatchTime", "url": "https://www.watchtime.com/",
+    "note": "Cele 590 de articole din 2026, găsite în harta site-ului și datate după pagina fiecăruia. Sunt păstrate cele despre ceasuri noi; ghidurile, listele, interviurile, evenimentele și testele sunt excluse." },
+  { "id": "gmtpost", "name": "GMT Post", "url": "https://www.gmtpost.com/category/new-watches",
+    "note": "Site-ul nu mai publică din aprilie 2022, așa că nu are lansări din 2026." },
+  { "id": "profwatches", "name": "Professional Watches", "url": "https://professionalwatches.com/",
+    "note": "Toate cele 81 de articole din 2026, citite prin API-ul site-ului; sunt păstrate cele despre ceasuri noi." },
+  { "id": "timeandwatches", "name": "Time and Watches", "url": "https://www.timeandwatches.com/",
+    "note": "Toate cele 336 de articole din 2026; sunt păstrate cele cu eticheta „new watches”." },
+  { "id": "watchesworld", "name": "WatchesWorld", "url": "https://watchesworld.com/",
+    "note": "Magazin de ceasuri second-hand; doar secțiunea Magazine contează, iar în 2026 are un singur articol despre o lansare." },
+  { "id": "allwatchnews", "name": "All Watch News", "url": "https://allwatchnews.com/",
+    "note": "Agregator de știri din 15 publicații (6.164 de știri în 2026). Sunt păstrate doar știrile despre o lansare anume; linkurile duc la articolul original. Multe sunt aceleași lansări ca în celelalte surse și se comasează." }
+]

@@ -1,0 +1,14 @@
+{
+ "source": "aBlogtoWatch",
+ "listingUrls": [
+  "https://www.ablogtowatch.com/wp-json/wp/v2/posts?after=2026-01-01T00:00:00&per_page=100&page=1..7&_embed"
+ ],
+ "pagesRead": 7,
+ "itemsSeen": 690,
+ "releases": 451,
+ "excluded": 239,
+ "withRefs": 19,
+ "dateRange": "2026-01-03 to 2026-10-21",
+ "complete": true,
+ "notes": "WP REST API, all 690 posts since 2026-01-01. Included: tag Watch Releases 2026, or category Watch Releases, or title Debut/New Release, or category Hands-On (excluding titles with Review/Long-Term/Second Look and two accessories), plus 19 hand-picked untagged Sponsored posts presenting a specific watch. Excluded: podcasts, giveaways, ICYMI round-ups, Top 10 lists, events, editorials, untagged Wrist Time Reviews, other sponsored posts. Caveats: items tagged Watch Releases 2026 include some Wrist Time Reviews; untagged Hands-On items are assumed 2026 launches but a few may be older watches; some sponsored picks may predate 2026. Refs only regex-extracted from REST article content (690 > 600 so pages not fetched separately), so low coverage and may contain noise; brand and model left empty (no structured field)."
+}
