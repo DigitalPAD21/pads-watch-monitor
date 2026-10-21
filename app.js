@@ -12,6 +12,7 @@ let current = "all";
 let query = "";
 let currentBrand = null;
 let onlyHighlights = false;
+let modelQuery = "";
 
 // Modelele marcate cu „Highlight” se păstrează în browserul vizitatorului (localStorage),
 // după o cheie stabilă brand + nume model, ca selecția să rămână și după actualizarea datelor.
@@ -136,11 +137,26 @@ function refRow(r) {
     </li>`;
 }
 
+// Căutarea pe pagina brandului: după numele modelului, referințe și numele din articole.
+// Toate cuvintele căutate trebuie să apară, în orice ordine, fără diacritice și majuscule.
+const foldText = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const matchesModel = (m, q) => {
+  const words = foldText(q).split(/\s+/).filter(Boolean);
+  if (!words.length) return true;
+  const hay = foldText([m.name, ...m.refs.map(r => r.ref || r.variant), ...m.coverage.map(c => c.model)].join(" "));
+  const compact = hay.replace(/[^a-z0-9]/g, "");
+  return words.every(w => hay.includes(w) || compact.includes(w.replace(/[^a-z0-9]/g, "")));
+};
+
 function renderBrand(brand) {
   const all = visibleModels().filter(m => m.brand === brand);
   const marked = all.filter(isHighlighted).length;
   if (!marked) onlyHighlights = false;
-  const list = onlyHighlights ? all.filter(isHighlighted) : all;
+  const shown = onlyHighlights ? all.filter(isHighlighted) : all;
+  const list = shown.filter(m => matchesModel(m, modelQuery));
+  $("model-count").textContent = modelQuery.trim()
+    ? (list.length ? `${plural(list.length, "model găsit", "modele găsite")} din ${shown.length}` : "")
+    : "";
   const refs = all.reduce((n, m) => n + m.refs.length, 0);
   $("brand-title").textContent = brand;
   $("brand-meta").textContent = `${lansari(refs)} (referințe) în ${plural(all.length, "model", "modele")} · ${current === "all" ? "toate sursele" : SOURCES.find(s => s.id === current).name}`;
@@ -149,7 +165,9 @@ function renderBrand(brand) {
     <button class="chip${onlyHighlights ? " is-active" : ""}" data-filter="hl"${marked ? "" : " disabled"}>★ Doar highlight (${marked})</button>`;
 
   $("model-list").innerHTML = list.map(m => modelCard(m)).join("") ||
-    `<li class="empty">${onlyHighlights ? "Niciun model marcat cu Highlight." : "Nicio lansare pentru această sursă."}</li>`;
+    `<li class="empty">${modelQuery.trim() && shown.length
+      ? `Niciun model ${esc(brand)} nu se potrivește cu „${esc(modelQuery.trim())}”. Încearcă alt nume sau o referință.`
+      : onlyHighlights ? "Niciun model marcat cu Highlight." : "Nicio lansare pentru această sursă."}</li>`;
   watchImages($("model-list"));
 }
 
@@ -247,7 +265,7 @@ function showView(view, brand) {
   $("view-highlights").hidden = view !== "highlights";
   $("view-about").hidden = view !== "about";
   if (view === "brand") {
-    if (brand !== currentBrand) onlyHighlights = false;
+    if (brand !== currentBrand) { onlyHighlights = false; modelQuery = ""; $("model-search").value = ""; }
     currentBrand = brand;
     renderBrand(brand);
   }
@@ -342,6 +360,7 @@ $("brand-filters").addEventListener("click", e => {
   renderBrand(currentBrand);
 });
 $("search").addEventListener("input", e => { query = e.target.value; renderList(); });
+$("model-search").addEventListener("input", e => { modelQuery = e.target.value; renderBrand(currentBrand); });
 
 // Butonul „Înapoi sus” apare după ce pagina a coborât peste un ecran.
 const toTop = $("to-top");
@@ -358,7 +377,13 @@ renderList();
 renderSources();
 renderHlTab();
 
-const start = location.hash.slice(1);
-if (brandBySlug[start]) showView("brand", brandBySlug[start]);
-else if (start === "despre") showView("about");
-else if (start === "highlights") showView("highlights");
+// Adresa (#brand, #highlights, #despre) deschide secțiunea potrivită, la încărcare și când se schimbă.
+function route() {
+  const h = location.hash.slice(1);
+  if (brandBySlug[h]) showView("brand", brandBySlug[h]);
+  else if (h === "despre") showView("about");
+  else if (h === "highlights") showView("highlights");
+  else if (!h && $("view-stats").hidden) showView("stats");
+}
+window.addEventListener("hashchange", route);
+route();
