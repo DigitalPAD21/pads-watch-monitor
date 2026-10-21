@@ -15,6 +15,7 @@
       <h1 class="title">PAD's Watch Monitor</h1>
       <nav class="tabs" role="tablist">
         <button class="tab is-active" data-view="stats" role="tab" aria-selected="true">2026</button>
+        <button class="tab" data-view="highlights" role="tab" aria-selected="false">Highlights <span class="tab-count" id="hl-tab-count" hidden></span></button>
         <button class="tab" data-view="about" role="tab" aria-selected="false">Despre Proiect</button>
       </nav>
     </div>
@@ -24,7 +25,7 @@
     <section id="view-stats" class="view">
       <div class="intro">
         <h2>Lansările brandurilor de ceasuri în 2026</h2>
-        <p class="muted">Numărul de lansări per brand, după sursele monitorizate.</p>
+        <p class="muted">Numărul de referințe lansate per brand, după sursele monitorizate.</p>
       </div>
 
       <div class="kpis" id="kpis"></div>
@@ -44,7 +45,23 @@
         <h2 id="brand-title"></h2>
         <p class="muted" id="brand-meta"></p>
       </div>
+      <div class="chips brand-filters" id="brand-filters"></div>
       <ul class="model-list" id="model-list"></ul>
+    </section>
+
+    <section id="view-highlights" class="view" hidden>
+      <div class="intro">
+        <h2>Highlights</h2>
+        <p class="muted" id="hl-meta"></p>
+      </div>
+      <div class="hl-actions" id="hl-actions">
+        <button class="chip is-active" id="hl-copy">Copiază lista</button>
+        <button class="chip" id="hl-clear">Golește lista</button>
+        <span class="muted" id="hl-copied" role="status"></span>
+      </div>
+      <textarea class="hl-text" id="hl-text" rows="8" readonly hidden aria-label="Lista de highlights ca text"></textarea>
+      <div id="hl-list"></div>
+      <p class="muted hl-note">Lista se păstrează în acest browser. Pe alt dispozitiv sau în alt browser pornește goală.</p>
     </section>
 
     <section id="view-about" class="view" hidden>
@@ -59,12 +76,14 @@
 
         <h3>Metodologie</h3>
         <ul>
-          <li>O „lansare” înseamnă un model nou sau o variantă nouă prezentată în 2026, așa cum apare în sursă.</li>
-          <li>Pe The Watch Pages, referințele care diferă doar prin variantă (de exemplu aceeași denumire de model) au fost comasate într-o singură lansare.</li>
-          <li>Pe Monochrome Watches și Hodinkee sunt incluse doar articolele despre lansări (Introducing, First Look, Hands-on); interviurile, știrile din industrie, ghidurile și editorialele sunt excluse. Numele modelelor au fost extrase din titlurile articolelor.</li>
-          <li>Imaginile sunt afișate direct de pe site-urile sursă și aparțin acestora. Fiecare model are un link către articolul sau pagina originală.</li>
+          <li>O „lansare” înseamnă o referință nouă din 2026. Fiecare variantă de cadran sau material are referința ei: Patek Philippe 5322G-001 (cadran albastru) și 5322G-010 (cadran verde) sunt două lansări ale aceluiași model.</li>
+          <li>Referințele vin din pagina fiecărui ceas de pe The Watch Pages, împreună cu culoarea cadranului și materialul carcasei, și din specificațiile articolelor Monochrome Watches („Reference”) și Hodinkee („Reference Number”).</li>
+          <li>Referințele sunt grupate pe model: aceeași referință de bază (5322G-001 și 5322G-010 → 5322G) sau aceeași denumire a modelului.</li>
+          <li>Un articol se leagă de un model prin referința din specificații sau din titlu. Dacă nu are referință, se leagă după nume. Același ceas apărut în mai multe surse e numărat o singură dată.</li>
+          <li>Modelele care apar doar în articole sunt păstrate cu referințele din articol. Dacă articolul nu dă nicio referință, modelul contează ca o singură lansare și e marcat „Referință nespecificată”.</li>
+          <li>Pe Monochrome Watches și Hodinkee sunt incluse doar articolele despre lansări (Introducing, First Look, Hands-on); interviurile, știrile din industrie, ghidurile și editorialele sunt excluse. Pendulele de birou nu sunt incluse.</li>
           <li>Numele brandurilor au fost normalizate (de exemplu „IWC Schaffhausen” → „IWC”, „BVLGARI” → „Bulgari”).</li>
-          <li>Vizualizarea „Toate sursele” adună numerele din fiecare sursă. Același ceas poate fi prezent în mai multe surse, deci totalul arată cât de prezent a fost un brand în presă, nu numărul de modele unice.</li>
+          <li>Imaginile sunt afișate direct de pe site-urile sursă și aparțin acestora. Fiecare referință are un link către pagina sau articolul original.</li>
         </ul>
         <p class="muted">Date colectate pe 21 octombrie 2026.</p>
       </div>
