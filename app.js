@@ -30,18 +30,22 @@ function toggleHighlight(m) {
 const covers = (m, id) => id === "all" || m.coverage.some(c => c.source.id === id);
 const visibleModels = () => models.filter(m => covers(m, current));
 
-// Pentru sursa selectată: brand -> { refs, models, bySource }.
+// Pentru sursa selectată: brand -> { refs, models, articles }.
+// articles: câte articole (sau fișe) a publicat fiecare sursă despre modelele brandului.
 function stats() {
   const out = {};
   for (const m of visibleModels()) {
-    const b = (out[m.brand] = out[m.brand] || { refs: 0, models: 0, highlights: 0, bySource: {} });
+    const b = (out[m.brand] = out[m.brand] || { refs: 0, models: 0, highlights: 0, articles: {} });
     b.refs += m.refs.length;
     b.models++;
     if (isHighlighted(m)) b.highlights++;
-    for (const id of new Set(m.coverage.map(c => c.source.id))) b.bySource[id] = (b.bySource[id] || 0) + 1;
+    for (const c of m.coverage) b.articles[c.source.id] = (b.articles[c.source.id] || 0) + 1;
   }
   return out;
 }
+
+// All Watch News adună știri din alte publicații: contează la statistică, dar nu apare sub branduri.
+const HIDDEN_IN_LIST = new Set(["allwatchnews"]);
 
 // În română, de la 20 în sus (și la multipli de 100) se pune „de”: „43 de lansări”.
 const plural = (n, one, many) => {
@@ -78,21 +82,27 @@ function renderList() {
     <div class="kpi"><b>${rows.length}</b><span>branduri</span></div>`;
 
   $("source-note").textContent = current === "all"
-    ? "O lansare = o referință: fiecare variantă de cadran sau material are referința ei. Același ceas apărut în mai multe surse e numărat o singură dată. Apasă pe un brand ca să vezi modelele și referințele."
+    ? "O lansare = o referință: fiecare variantă de cadran sau material are referința ei. Același ceas apărut în mai multe surse e numărat o singură dată. Sub fiecare brand: câte articole a publicat fiecare sursă. Apasă pe un brand ca să vezi modelele și referințele."
     : `Referințele modelelor despre care a scris ${SOURCES.find(s => s.id === current).name}. ${SOURCES.find(s => s.id === current).note}`;
 
   const q = query.trim().toLowerCase();
   const visible = rows.map((r, i) => [i + 1, ...r]).filter(([, brand]) => brand.toLowerCase().includes(q));
 
   $("brand-list").innerHTML = visible.length ? visible.map(([rank, brand, b]) => {
-    const parts = [plural(b.models, "model", "modele")];
+    const parts = [];
     if (b.highlights) parts.push(`<span class="hl-count">★ ${b.highlights} highlight</span>`);
-    if (current === "all") parts.push(...SOURCES.filter(s => b.bySource[s.id]).map(s => `${esc(s.name)}: ${b.bySource[s.id]}`));
+    if (current === "all") {
+      // Sursele, de la cele cu cele mai multe articole la cele cu cele mai puține.
+      parts.push(...SOURCES
+        .filter(s => b.articles[s.id] && !HIDDEN_IN_LIST.has(s.id))
+        .sort((x, y) => b.articles[y.id] - b.articles[x.id] || x.name.localeCompare(y.name))
+        .map(s => `${esc(s.name)}: ${b.articles[s.id]}`));
+    }
     return `<li>
       <span class="rank">${rank}.</span>
-      <span class="line"><button class="brand-link" data-brand="${esc(brand)}">${esc(brand)}</button> - <span class="n">${lansari(b.refs)}</span></span>
+      <span class="line"><button class="brand-link" data-brand="${esc(brand)}">${esc(brand)}</button> - <span class="n">${lansari(b.refs)}</span> - <span class="n">${plural(b.models, "model", "modele")}</span></span>
       <span class="bar"><i style="width:${(b.refs / max) * 100}%"></i></span>
-      <span class="split">${parts.join(" · ")}</span>
+      ${parts.length ? `<span class="split">${parts.join(" · ")}</span>` : ""}
     </li>`;
   }).join("") : `<li class="empty">Niciun brand găsit.</li>`;
 }
