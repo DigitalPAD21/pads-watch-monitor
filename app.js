@@ -59,7 +59,8 @@ const brandBySlug = Object.fromEntries([...new Set(models.map(m => m.brand))].ma
 const $ = id => document.getElementById(id);
 
 function renderChips() {
-  const chips = [{ id: "all", name: "Toate sursele" }, ...SOURCES];
+  // Sursele fără nicio lansare (ex. GMT Post) apar doar în „Despre Proiect”.
+  const chips = [{ id: "all", name: "Toate sursele" }, ...SOURCES.filter(s => models.some(m => covers(m, s.id)))];
   $("source-chips").innerHTML = chips.map(c => `
     <button class="chip${c.id === current ? " is-active" : ""}" data-source="${c.id}">${esc(c.name)}</button>`).join("");
 }
