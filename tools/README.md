@@ -96,4 +96,8 @@ titlurile fără rezultat sunt folosite așa cum vin, ceea ce produce nume mai p
 node tools/generate.js
 ```
 
+Corecțiile manuale din `corrections.js` (vezi README-ul principal) nu intră în `data.js`; site-ul le aplică la
+încărcare. `generate.js` le aplică doar în `references.md`, ca raportul să arate ce arată site-ul.
+După date noi, verifică în secțiunea Corecții dacă vreo corecție a devenit „Neaplicată”.
+
 Apoi refă pagina pentru claude.ai (vezi README-ul principal), fă commit și push.

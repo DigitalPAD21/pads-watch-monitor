@@ -6,6 +6,7 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
 - Articole legate prin nume: 1335
 - Referințe adăugate din articole (lipsă în The Watch Pages): 31
 - Articole fără corespondent, grupate separat: 3596 → 1681 de modele
+- Corecții manuale aplicate: 0 din 0
 
 ## 1776 Atelier
 

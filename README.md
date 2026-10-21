@@ -21,8 +21,27 @@ Apoi deschide http://localhost:8080.
 - `data.js`: datele, generate de `tools/generate.js` (nu se editează de mână)
 - `references.md`: raportul cu toate referințele, pe branduri și modele
 - `artifact.html`: varianta pentru publicarea pe claude.ai
-- `server.js`: server local minimal
+- `server.js`: server local; tot el salvează corecțiile din modul editare
+- `corrections.js`, `corrections-lib.js`: corecțiile manuale și regulile care le aplică
 - `tools/`: scripturile și datele intermediare din care se reface statistica (vezi [tools/README.md](tools/README.md))
+
+## Corecții manuale (mod editare)
+
+Pornește site-ul local cu `node server.js` și deschide http://localhost:8080. Apare banda „Mod editare” și butonul
+**Corecții** în header. Pe pagina unui brand, fiecare model are butoanele **✎ Redenumește**, **⇄ Comasează** și
+**🗑 Șterge modelul**, iar fiecare referință are **✎ Editează** și **🗑 Șterge**.
+
+- Corecțiile se salvează în `corrections.js` și se aplică imediat: lansările și modelele se recalculează peste tot.
+- Secțiunea **Corecții** le arată pe toate, cu buton **Anulează** pentru fiecare.
+- `data.js` nu se modifică: corecțiile se aplică peste el la încărcarea paginii, așa că rămân valabile și după ce
+  statistica e refăcută cu date noi. Dacă un model corectat nu mai există în datele noi, corecția apare ca „Neaplicată”.
+- Ca să le vadă toată lumea, fă commit și push la `corrections.js`. Site-ul public și pagina de pe claude.ai nu au
+  butoanele de editare.
+
+| Fișier | Rol |
+|---|---|
+| `corrections.js` | Lista corecțiilor, în ordinea în care au fost făcute |
+| `corrections-lib.js` | Regulile care le aplică (folosite de site și de `tools/generate.js`) |
 
 ## Refacerea statisticii
 

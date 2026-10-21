@@ -2,17 +2,33 @@
 // O lansare = o referință (fiecare variantă de cadran sau material are referința ei).
 // Referințele sunt grupate pe model; fiecare model arată în ce surse a apărut.
 
-const models = MODELS.map(([brand, name, articleOnly, refs, coverage], i) => ({
-  id: i, brand, name, articleOnly: !!articleOnly,
+// Datele generate (data.js), înainte de corecțiile manuale.
+const baseModels = MODELS.map(([brand, name, articleOnly, refs, coverage]) => ({
+  brand, name, articleOnly: !!articleOnly, aliases: [],
   refs: refs.map(([ref, dial, material, img, url, variant]) => ({ ref, dial, material, img, url, variant })),
   coverage: coverage.map(([src, model, url]) => ({ source: SOURCES[src], model, url }))
 }));
+
+// Corecțiile manuale (corrections.js) se aplică peste date; tot ce se afișează și se numără vine din `models`.
+let corrections = typeof CORRECTIONS !== "undefined" ? CORRECTIONS : [];
+let correctionStatus = [];
+let models = [];
+let brandBySlug = {};
+function rebuild() {
+  const r = Corrections.apply(baseModels, corrections);
+  models = r.models.map((m, i) => ({ ...m, id: i }));
+  correctionStatus = r.status;
+  brandBySlug = Object.fromEntries([...new Set(models.map(m => m.brand))].map(b => [slug(b), b]));
+}
 
 let current = "all";
 let query = "";
 let currentBrand = null;
 let onlyHighlights = false;
 let modelQuery = "";
+// Modul editare există doar pe varianta locală (node server.js); `editing` e formularul deschis acum.
+let editMode = false;
+let editing = null; // { act, model, ref? }
 
 // Modelele marcate cu „Highlight” se păstrează în browserul vizitatorului (localStorage),
 // după o cheie stabilă brand + nume model, ca selecția să rămână și după actualizarea datelor.
@@ -21,10 +37,12 @@ const modelKey = m => slug(m.brand) + "/" + slug(m.name);
 const highlights = new Set((() => {
   try { return JSON.parse(localStorage.getItem(HL_KEY) || "[]"); } catch { return []; }
 })());
-const isHighlighted = m => highlights.has(modelKey(m));
+// Un model redenumit sau comasat rămâne marcat: se verifică și numele lui vechi.
+const keysOf = m => [modelKey(m), ...(m.aliases || []).map(a => slug(m.brand) + "/" + slug(a))];
+const isHighlighted = m => keysOf(m).some(k => highlights.has(k));
 function toggleHighlight(m) {
-  const k = modelKey(m);
-  highlights.has(k) ? highlights.delete(k) : highlights.add(k);
+  if (isHighlighted(m)) keysOf(m).forEach(k => highlights.delete(k));
+  else highlights.add(modelKey(m));
   try { localStorage.setItem(HL_KEY, JSON.stringify([...highlights])); } catch {}
 }
 
@@ -59,7 +77,7 @@ const fmt = n => n.toLocaleString("ro-RO");
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const slug = b => b.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-const brandBySlug = Object.fromEntries([...new Set(models.map(m => m.brand))].map(b => [slug(b), b]));
+rebuild();
 
 const $ = id => document.getElementById(id);
 
@@ -120,9 +138,13 @@ const RO = {
 };
 const ro = s => s.split(/\s*,\s*/).map(p => RO[p.toLowerCase()] || p).join(", ");
 
-function refRow(r) {
-  const code = r.ref || r.variant || "Referință nespecificată";
+const refLabel = r => r.ref || r.variant || "Referință nespecificată";
+
+function refRow(r, m) {
+  const code = refLabel(r);
   const details = [r.dial && `Cadran ${ro(r.dial)}`, r.material && ro(r.material)].filter(Boolean).join(" · ");
+  const key = Corrections.refKey(r);
+  const ed = editMode && editing && editing.model === m.id && editing.ref === key ? editing : null;
   return `
     <li class="ref">
       <a class="thumb" href="${esc(r.url)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
@@ -130,11 +152,65 @@ function refRow(r) {
         <span class="thumb-fallback">Imagine indisponibilă</span>
       </a>
       <div class="ref-text">
-        <p class="ref-code${r.ref ? "" : " is-unknown"}">${esc(code)}</p>
+        ${ed && ed.act === "editRef" ? `
+          <form class="edit-form" data-model="${m.id}" data-ref="${esc(key)}" data-act="editRef">
+            <label class="edit-label" for="edit-ref-input">Referința corectă</label>
+            <input id="edit-ref-input" class="edit-input" value="${esc(r.ref || "")}" placeholder="ex. 5322G-001" required>
+            <div class="edit-actions"><button class="btn-save" type="submit">Salvează</button><button class="btn-cancel" type="button" data-act="cancel">Renunță</button></div>
+          </form>` : `<p class="ref-code${r.ref ? "" : " is-unknown"}">${esc(code)}</p>`}
         ${details ? `<p class="ref-details">${esc(details)}</p>` : ""}
         <a class="ref-link" href="${esc(r.url)}" target="_blank" rel="noopener">Vezi la sursă</a>
+        ${ed && ed.act === "deleteRef" ? `
+          <div class="edit-confirm" role="alert">
+            <p>Ștergi referința <strong>${esc(code)}</strong>?${m.refs.length === 1 ? " E singura referință a modelului, așa că modelul dispare și el." : ""}</p>
+            <div class="edit-actions"><button class="btn-danger" type="button" data-act="confirmDeleteRef" data-model="${m.id}" data-ref="${esc(key)}">Da, șterge</button><button class="btn-cancel" type="button" data-act="cancel">Renunță</button></div>
+          </div>` : ""}
+        ${editMode && !ed ? `
+          <div class="edit-tools">
+            <button class="edit-btn" type="button" data-act="editRef" data-model="${m.id}" data-ref="${esc(key)}" title="Editează referința">✎ Editează</button>
+            <button class="edit-btn is-danger" type="button" data-act="deleteRef" data-model="${m.id}" data-ref="${esc(key)}" title="Șterge referința">🗑 Șterge</button>
+          </div>` : ""}
       </div>
     </li>`;
+}
+
+// Bara de editare a unui model și formularul deschis pentru el (redenumire, ștergere, comasare).
+function modelEditor(m) {
+  if (!editMode) return "";
+  const ed = editing && editing.model === m.id && !editing.ref ? editing : null;
+  if (!ed) return `
+    <div class="edit-tools">
+      <button class="edit-btn" type="button" data-act="rename" data-model="${m.id}">✎ Redenumește</button>
+      <button class="edit-btn" type="button" data-act="merge" data-model="${m.id}">⇄ Comasează</button>
+      <button class="edit-btn is-danger" type="button" data-act="deleteModel" data-model="${m.id}">🗑 Șterge modelul</button>
+    </div>`;
+  if (ed.act === "rename") return `
+    <form class="edit-form" data-model="${m.id}" data-act="rename">
+      <label class="edit-label" for="edit-name-input">Numele corect al modelului</label>
+      <input id="edit-name-input" class="edit-input" value="${esc(m.name)}" required>
+      <div class="edit-actions"><button class="btn-save" type="submit">Salvează</button><button class="btn-cancel" type="button" data-act="cancel">Renunță</button></div>
+    </form>`;
+  if (ed.act === "deleteModel") return `
+    <div class="edit-confirm" role="alert">
+      <p>Ștergi modelul <strong>${esc(m.name)}</strong> cu ${plural(m.refs.length, "referință", "referințe")}? Lansările brandului scad cu ${m.refs.length}.</p>
+      <div class="edit-actions"><button class="btn-danger" type="button" data-act="confirmDeleteModel" data-model="${m.id}">Da, șterge</button><button class="btn-cancel" type="button" data-act="cancel">Renunță</button></div>
+    </div>`;
+  if (ed.act === "merge") {
+    const others = models.filter(x => x.brand === m.brand && x !== m).sort((a, b) => a.name.localeCompare(b.name));
+    if (!others.length) return `
+      <div class="edit-confirm"><p>${esc(m.brand)} nu are alt model cu care să comasezi.</p>
+        <div class="edit-actions"><button class="btn-cancel" type="button" data-act="cancel">Închide</button></div></div>`;
+    return `
+    <form class="edit-form" data-model="${m.id}" data-act="merge">
+      <label class="edit-label" for="edit-merge-select">Comasează „${esc(m.name)}” în modelul:</label>
+      <select id="edit-merge-select" class="edit-input" required>
+        ${others.map(x => `<option value="${x.id}">${esc(x.name)} (${plural(x.refs.length, "referință", "referințe")})</option>`).join("")}
+      </select>
+      <p class="edit-hint">Referințele și articolele lui se mută în modelul ales, iar „${esc(m.name)}” dispare din listă. Referințele identice sunt numărate o singură dată.</p>
+      <div class="edit-actions"><button class="btn-save" type="submit">Comasează</button><button class="btn-cancel" type="button" data-act="cancel">Renunță</button></div>
+    </form>`;
+  }
+  return "";
 }
 
 // Căutarea pe pagina brandului: după numele modelului, referințe și numele din articole.
@@ -186,8 +262,10 @@ function modelCard(m) {
             <span aria-hidden="true">${isHighlighted(m) ? "★" : "☆"}</span> Highlight</button>
         </div>
         <p class="model-meta">${plural(m.refs.length, "referință", "referințe")} · ${tags}</p>
+        ${m.aliases.length && editMode ? `<p class="edit-hint">Nume anterioare: ${m.aliases.map(esc).join(", ")}</p>` : ""}
+        ${modelEditor(m)}
       </header>
-      <ul class="ref-list">${m.refs.map(refRow).join("")}</ul>
+      <ul class="ref-list">${m.refs.map(r => refRow(r, m)).join("")}</ul>
       ${articles.length ? `
       <details class="dups">
         <summary>${plural(articles.length, "articol", "articole")} despre acest model</summary>
@@ -263,17 +341,145 @@ function showView(view, brand) {
   $("view-stats").hidden = view !== "stats";
   $("view-brand").hidden = view !== "brand";
   $("view-highlights").hidden = view !== "highlights";
+  $("view-corrections").hidden = view !== "corrections";
   $("view-about").hidden = view !== "about";
+  if (view !== "brand") editing = null;
   if (view === "brand") {
-    if (brand !== currentBrand) { onlyHighlights = false; modelQuery = ""; $("model-search").value = ""; }
+    if (brand !== currentBrand) { onlyHighlights = false; modelQuery = ""; $("model-search").value = ""; editing = null; }
     currentBrand = brand;
     renderBrand(brand);
   }
   if (view === "stats") renderList();
   if (view === "highlights") { confirmClear = false; renderHighlights(); }
-  const hash = view === "brand" ? slug(brand) : view === "about" ? "despre" : view === "highlights" ? "highlights" : "";
+  if (view === "corrections") renderCorrections();
+  const hash = view === "brand" ? slug(brand) : view === "about" ? "despre" : view === "highlights" ? "highlights" : view === "corrections" ? "corectii" : "";
   if (location.hash.slice(1) !== hash) history.replaceState(null, "", hash ? "#" + hash : location.pathname + location.search);
   window.scrollTo(0, 0);
+}
+
+// ---------- Mod editare ----------
+
+const describe = c => ({
+  deleteModel: () => `Șters modelul „${c.model}”`,
+  renameModel: () => `Redenumit „${c.model}” în „${c.to}”`,
+  deleteRef: () => `Ștearsă referința ${c.label || c.ref} din „${c.model}”`,
+  editRef: () => `Referința ${c.label || c.ref} corectată în ${c.to} („${c.model}”)`,
+  merge: () => `Comasat „${c.model}” în „${c.into}”`
+}[c.type] || (() => c.type))();
+
+function renderCorrections() {
+  const byId = Object.fromEntries(correctionStatus.map(s => [s.id, s]));
+  const list = [...corrections].reverse();
+  $("corr-meta").textContent = list.length
+    ? `${plural(list.length, "corecție", "corecții")}, cea mai nouă prima. Anularea unei corecții refă cifrele imediat.`
+    : "Nu ai făcut încă nicio corecție.";
+  $("corr-list").innerHTML = list.length ? list.map(c => {
+    const s = byId[c.id] || {};
+    return `
+      <li class="corr${s.applied === false ? " is-unapplied" : ""}">
+        <div class="corr-text">
+          <p class="corr-title"><button class="brand-link" data-brand="${esc(c.brand)}">${esc(c.brand)}</button> · ${esc(describe(c))}</p>
+          <p class="muted corr-date">${esc(c.at || "")}${s.applied === false ? ` · <span class="corr-warn">Neaplicată: ${esc(s.reason)}</span>` : ""}</p>
+        </div>
+        <button class="chip" type="button" data-undo="${esc(c.id)}">Anulează</button>
+      </li>`;
+  }).join("") : `
+    <li class="hl-empty">
+      <p><strong>Nicio corecție încă.</strong></p>
+      <p class="muted">Deschide un brand și folosește butoanele ✎, ⇄ și 🗑 de pe carduri. Corecțiile apar aici și pot fi anulate oricând.</p>
+    </li>`;
+}
+
+function setEditStatus(text, isError) {
+  const el = $("edit-status");
+  el.textContent = text;
+  el.classList.toggle("is-error", !!isError);
+}
+
+async function sendCorrection(body) {
+  setEditStatus("Se salvează…");
+  try {
+    const r = await fetch("/api/corrections", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || "Salvarea a eșuat.");
+    corrections = j.corrections;
+    rebuild();
+    editing = null;
+    rerender();
+    setEditStatus(body.remove ? "Corecția a fost anulată. Cifrele sunt actualizate." : "Salvat în corrections.js. Cifrele sunt actualizate.");
+  } catch (e) {
+    setEditStatus(`Nu s-a salvat: ${e.message} Verifică dacă rulează node server.js.`, true);
+  }
+}
+
+// Redesenează secțiunea deschisă după o modificare.
+function rerender() {
+  renderChips();
+  renderHlTab();
+  renderSources();
+  if (!$("view-brand").hidden) {
+    if (!models.some(m => m.brand === currentBrand)) { showView("stats"); return; }
+    renderBrand(currentBrand);
+  }
+  if (!$("view-stats").hidden) renderList();
+  if (!$("view-highlights").hidden) renderHighlights();
+  if (!$("view-corrections").hidden) renderCorrections();
+}
+
+const snapshot = m => ({ brand: m.brand, model: m.name, refs: Corrections.refCodes(m) });
+
+function onEditClick(e) {
+  const btn = e.target.closest("[data-act]");
+  if (!btn || !editMode || btn.tagName === "FORM") return;
+  const act = btn.dataset.act;
+  const m = btn.dataset.model !== undefined ? models[+btn.dataset.model] : null;
+  if (act === "cancel") { editing = null; rerender(); return; }
+  if (act === "confirmDeleteModel") return sendCorrection({ add: { type: "deleteModel", ...snapshot(m) } });
+  if (act === "confirmDeleteRef") {
+    const r = m.refs.find(x => Corrections.refKey(x) === btn.dataset.ref);
+    return sendCorrection({ add: { type: "deleteRef", ...snapshot(m), ref: btn.dataset.ref, label: refLabel(r) } });
+  }
+  if (["rename", "merge", "deleteModel", "editRef", "deleteRef"].includes(act)) {
+    editing = { act, model: m.id, ref: btn.dataset.ref || null };
+    rerender();
+    const input = document.querySelector(".edit-form .edit-input");
+    if (input) { input.focus(); if (input.select) input.select(); }
+  }
+}
+
+function onEditSubmit(e) {
+  const form = e.target.closest(".edit-form");
+  if (!form) return;
+  e.preventDefault();
+  const m = models[+form.dataset.model];
+  const value = form.querySelector(".edit-input").value.trim();
+  if (!value) return;
+  if (form.dataset.act === "rename") {
+    if (value === m.name) { editing = null; rerender(); return; }
+    sendCorrection({ add: { type: "renameModel", ...snapshot(m), to: value } });
+  } else if (form.dataset.act === "editRef") {
+    const r = m.refs.find(x => Corrections.refKey(x) === form.dataset.ref);
+    if (value === r.ref) { editing = null; rerender(); return; }
+    sendCorrection({ add: { type: "editRef", ...snapshot(m), ref: form.dataset.ref, label: refLabel(r), to: value } });
+  } else if (form.dataset.act === "merge") {
+    const into = models[+value];
+    sendCorrection({ add: { type: "merge", ...snapshot(m), into: into.name, intoRefs: Corrections.refCodes(into) } });
+  }
+}
+
+// Activează modul editare doar dacă pagina e servită de node server.js pe acest calculator.
+async function detectEditMode() {
+  if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
+  try {
+    const r = await fetch("/api/edit", { cache: "no-store" });
+    if (!r.ok || !(await r.json()).enabled) return;
+  } catch { return; }
+  editMode = true;
+  document.body.classList.add("is-editing");
+  $("edit-banner").hidden = false;
+  $("corr-tab").hidden = false;
+  rerender();
+  if (location.hash.slice(1) === "corectii") showView("corrections");
 }
 
 // Numărul de pe butonul din header.
@@ -362,6 +568,18 @@ $("brand-filters").addEventListener("click", e => {
 $("search").addEventListener("input", e => { query = e.target.value; renderList(); });
 $("model-search").addEventListener("input", e => { modelQuery = e.target.value; renderBrand(currentBrand); });
 
+for (const id of ["model-list", "hl-list"]) {
+  $(id).addEventListener("click", onEditClick);
+  $(id).addEventListener("submit", onEditSubmit);
+}
+$("corr-list").addEventListener("click", e => {
+  const undo = e.target.closest("[data-undo]");
+  if (undo) return sendCorrection({ remove: undo.dataset.undo });
+  const brand = e.target.closest(".brand-link");
+  if (brand) showView("brand", brand.dataset.brand);
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && editing) { editing = null; rerender(); } });
+
 // Butonul „Înapoi sus” apare după ce pagina a coborât peste un ecran.
 const toTop = $("to-top");
 const updateToTop = () => { toTop.hidden = window.scrollY < window.innerHeight * 0.8; };
@@ -383,7 +601,9 @@ function route() {
   if (brandBySlug[h]) showView("brand", brandBySlug[h]);
   else if (h === "despre") showView("about");
   else if (h === "highlights") showView("highlights");
+  else if (h === "corectii" && editMode) showView("corrections");
   else if (!h && $("view-stats").hidden) showView("stats");
 }
 window.addEventListener("hashchange", route);
 route();
+detectEditMode();

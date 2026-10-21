@@ -266,15 +266,29 @@ let js = "// Generat automat pe " + new Date().toISOString().slice(0, 10) + ".\n
   "const MODELS = [\n" + rows.map(r => "  " + JSON.stringify(r)).join(",\n") + "\n];\n";
 fs.writeFileSync(path.join(__dirname, "..", "data.js"), js);
 
-// Raport pentru verificare.
-let md = `# Referințe 2026\n\nGenerat pe ${new Date().toISOString().slice(0, 10)}. ${totalRefs} de referințe în ${models.length} de modele, ${brands} de branduri.\n\n` +
+// Raport pentru verificare, cu corecțiile manuale (corrections.js) aplicate, ca să arate ce arată și site-ul.
+// data.js rămâne fără corecții: site-ul le aplică la încărcare, așa că o corecție se poate anula fără regenerare.
+const Corrections = require(path.join(__dirname, "..", "corrections-lib.js"));
+const corrSrc = fs.readFileSync(path.join(__dirname, "..", "corrections.js"), "utf8");
+const corrList = JSON.parse((corrSrc.match(/const CORRECTIONS = ([\s\S]*);\s*$/) || [, "[]"])[1]);
+const corrected = Corrections.apply(models.map(m => ({
+  brand: m.brand, name: m.name, articleOnly: !!m.articleOnly, refs: [...m.refs.values()], coverage: m.coverage, aliases: []
+})), corrList);
+const shownModels = corrected.models;
+const shownRefs = shownModels.reduce((n, m) => n + m.refs.length, 0);
+const unapplied = corrected.status.filter(s => !s.applied);
+let md = `# Referințe 2026\n\nGenerat pe ${new Date().toISOString().slice(0, 10)}. ${shownRefs} de referințe în ${shownModels.length} de modele, ` +
+  `${new Set(shownModels.map(m => m.brand)).size} de branduri.\n\n` +
   `- Articole legate de un model prin referință: ${linkedByRef}\n- Articole legate prin nume: ${linkedByName}\n` +
-  `- Referințe adăugate din articole (lipsă în The Watch Pages): ${addedRefs}\n- Articole fără corespondent, grupate separat: ${orphans.length} → ${g.groups.length} de modele\n`;
-for (const b of [...new Set(models.map(m => m.brand))]) {
+  `- Referințe adăugate din articole (lipsă în The Watch Pages): ${addedRefs}\n- Articole fără corespondent, grupate separat: ${orphans.length} → ${g.groups.length} de modele\n` +
+  `- Corecții manuale aplicate: ${corrList.length - unapplied.length} din ${corrList.length}` +
+  (unapplied.length ? ` (neaplicate: ${unapplied.map(s => s.id).join(", ")})` : "") + "\n";
+for (const b of [...new Set(shownModels.map(m => m.brand))]) {
   md += `\n## ${b}\n`;
-  for (const m of models.filter(x => x.brand === b)) {
-    md += `\n- **${m.name}** — ${m.refs.size} ${m.refs.size === 1 ? "referință" : "referințe"}${m.articleOnly ? " (doar din articole)" : ""}\n`;
-    for (const r of m.refs.values()) md += `  - ${r.ref || r.variant || "referință nespecificată"}${r.dial ? " · " + r.dial : ""}${r.material ? " · " + r.material : ""}\n`;
+  for (const m of shownModels.filter(x => x.brand === b)) {
+    md += `\n- **${m.name}** — ${m.refs.length} ${m.refs.length === 1 ? "referință" : "referințe"}${m.articleOnly ? " (doar din articole)" : ""}` +
+      (m.aliases.length ? ` (corectat; nume anterioare: ${m.aliases.join(", ")})` : "") + "\n";
+    for (const r of m.refs) md += `  - ${r.ref || r.variant || "referință nespecificată"}${r.dial ? " · " + r.dial : ""}${r.material ? " · " + r.material : ""}\n`;
     md += `  - surse: ${m.coverage.map(c => `${SOURCES[srcIndex[c.src]].name} („${c.model}”)`).join("; ")}\n`;
   }
 }

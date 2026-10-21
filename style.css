@@ -396,6 +396,78 @@ body {
 .badge { display: inline-block; font-size: .75rem; padding: 1px 8px; border-radius: 999px; margin-left: 6px; background: var(--gold-soft); }
 .badge.blocked { background: var(--bad-bg); color: var(--bad-fg); }
 
+/* Mod editare (doar local) */
+.edit-banner { background: var(--warn-bg); color: var(--warn-fg); border-bottom: 1px solid var(--line); font-size: .9rem; }
+.edit-banner-inner { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; align-items: center; padding-block: 8px; }
+.edit-banner code { font: 13px ui-monospace, Consolas, monospace; }
+.edit-status { font-weight: 600; }
+.edit-status.is-error { color: var(--bad-fg); }
+.tab-edit { border-style: dashed; }
+.edit-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.edit-btn {
+  appearance: none;
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--muted);
+  font: 500 12.5px var(--body);
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.edit-btn:hover { border-color: var(--gold); color: var(--ink); }
+.edit-btn.is-danger:hover { border-color: var(--bad-fg); color: var(--bad-fg); }
+.edit-btn:focus-visible, .btn-save:focus-visible, .btn-cancel:focus-visible, .btn-danger:focus-visible, .edit-input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.edit-form, .edit-confirm {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.edit-confirm { border-color: var(--bad-fg); background: var(--bad-bg); color: var(--bad-fg); }
+.edit-confirm p { margin: 0; }
+.edit-label { font-size: .8rem; font-weight: 600; color: var(--muted); }
+.edit-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.edit-hint { margin: 0; font-size: .8rem; color: var(--muted); }
+.edit-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-save, .btn-cancel, .btn-danger {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font: 600 13px var(--body);
+  cursor: pointer;
+}
+.btn-save { background: var(--navy); border-color: var(--navy); color: var(--on-navy); }
+.btn-cancel { background: var(--surface); color: var(--ink); }
+.btn-danger { background: var(--bad-fg); border-color: var(--bad-fg); color: var(--bad-bg); }
+.corr-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.corr {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.corr-text { min-width: 0; }
+.corr-title { margin: 0; overflow-wrap: anywhere; }
+.corr-date { margin: 2px 0 0; font-size: .8rem; }
+.corr.is-unapplied { border-style: dashed; }
+.corr-warn { color: var(--bad-fg); font-weight: 600; }
+
 /* Back to top: fix în dreapta jos, apare după ce pagina a fost derulată. */
 .to-top {
   position: fixed;

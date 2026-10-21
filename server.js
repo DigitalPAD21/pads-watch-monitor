@@ -1,18 +1,76 @@
-// Server static minimal pentru dezvoltare locală: node server.js -> http://localhost:8080
+// Server local pentru dezvoltare și pentru modul editare: node server.js -> http://localhost:8080
+// Servește fișierele site-ului și, doar local, salvează corecțiile manuale în corrections.js.
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
-const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript" };
+const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".md": "text/markdown" };
 const root = __dirname;
+const CORRECTIONS_FILE = path.join(root, "corrections.js");
+const HEADER = "// Corecțiile manuale, în ordinea în care au fost făcute. Se editează din modul editare (node server.js)\n" +
+  "// sau de mână; vezi corrections-lib.js pentru ce înseamnă fiecare tip.\n";
+const TYPES = new Set(["deleteModel", "renameModel", "deleteRef", "editRef", "merge"]);
+
+function readCorrections() {
+  const src = fs.readFileSync(CORRECTIONS_FILE, "utf8");
+  const m = src.match(/const CORRECTIONS = ([\s\S]*);\s*$/);
+  return m ? JSON.parse(m[1]) : [];
+}
+function writeCorrections(list) {
+  fs.writeFileSync(CORRECTIONS_FILE, HEADER + "const CORRECTIONS = " + JSON.stringify(list, null, 2) + ";\n");
+}
+
+const json = (res, code, body) => {
+  res.writeHead(code, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+  res.end(JSON.stringify(body));
+};
+
+// Doar pagina deschisă de pe acest calculator poate modifica: alt site nu poate trimite cereri aici.
+const localOrigin = req => {
+  const o = req.headers.origin || "";
+  return /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o);
+};
+
+function handleApi(req, res) {
+  if (req.url === "/api/edit" && req.method === "GET") return json(res, 200, { enabled: true });
+  if (req.url !== "/api/corrections" || req.method !== "POST") return json(res, 404, { error: "Not found" });
+  if (!localOrigin(req) || !/application\/json/.test(req.headers["content-type"] || "")) {
+    return json(res, 403, { error: "Corecțiile se pot face doar din pagina deschisă local." });
+  }
+  let body = "";
+  req.on("data", c => { body += c; if (body.length > 100000) req.destroy(); });
+  req.on("end", () => {
+    try {
+      const msg = JSON.parse(body);
+      const list = readCorrections();
+      if (msg.add) {
+        const c = msg.add;
+        if (!TYPES.has(c.type) || !c.brand || !c.model) return json(res, 400, { error: "Corecție incompletă." });
+        list.push({ id: crypto.randomUUID().slice(0, 8), at: new Date().toISOString().slice(0, 16).replace("T", " "), ...c });
+      } else if (msg.remove) {
+        const i = list.findIndex(c => c.id === msg.remove);
+        if (i < 0) return json(res, 404, { error: "Corecția nu există." });
+        list.splice(i, 1);
+      } else return json(res, 400, { error: "Cerere necunoscută." });
+      writeCorrections(list);
+      json(res, 200, { corrections: list });
+    } catch (e) {
+      json(res, 400, { error: "Cerere invalidă: " + e.message });
+    }
+  });
+}
 
 http.createServer((req, res) => {
+  if (req.url.startsWith("/api/")) return handleApi(req, res);
   const pathname = decodeURIComponent(req.url.split("?")[0]);
   const file = path.join(root, pathname === "/" ? "index.html" : path.normalize(pathname));
   if (!file.startsWith(root)) { res.writeHead(403); return res.end(); }
   fs.readFile(file, (err, data) => {
     if (err) { res.writeHead(404); return res.end("Not found"); }
-    res.writeHead(200, { "Content-Type": (types[path.extname(file)] || "application/octet-stream") + "; charset=utf-8" });
+    const headers = { "Content-Type": (types[path.extname(file)] || "application/octet-stream") + "; charset=utf-8" };
+    if (path.basename(file) === "corrections.js") headers["Cache-Control"] = "no-store";
+    res.writeHead(200, headers);
     res.end(data);
   });
-}).listen(8080, () => console.log("http://localhost:8080"));
+}).listen(8080, "127.0.0.1", () => console.log("http://localhost:8080 (mod editare activ)"));

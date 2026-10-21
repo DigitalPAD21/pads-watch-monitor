@@ -11,9 +11,17 @@
       <button class="tab is-active" data-view="stats" role="tab" aria-selected="true">2026</button>
       <button class="tab" data-view="highlights" role="tab" aria-selected="false">Highlights <span class="tab-count" id="hl-tab-count" hidden></span></button>
       <button class="tab" data-view="about" role="tab" aria-selected="false">Despre Proiect</button>
+      <button class="tab tab-edit" id="corr-tab" data-view="corrections" role="tab" aria-selected="false" hidden>Corecții</button>
     </nav>
   </div>
 </header>
+
+<div class="edit-banner" id="edit-banner" hidden>
+  <div class="wrap edit-banner-inner">
+    <span><strong>Mod editare</strong> · Ștergerile, redenumirile și comasările se salvează în <code>corrections.js</code>. Publică-le cu commit și push.</span>
+    <span class="edit-status" id="edit-status" role="status"></span>
+  </div>
+</div>
 
 <main class="wrap content">
   <section id="view-stats" class="view">
@@ -62,6 +70,14 @@
     <p class="muted hl-note">Lista se păstrează în acest browser. Pe alt dispozitiv sau în alt browser pornește goală.</p>
   </section>
 
+  <section id="view-corrections" class="view" hidden>
+    <div class="intro">
+      <h2>Corecții</h2>
+      <p class="muted" id="corr-meta"></p>
+    </div>
+    <ul class="corr-list" id="corr-list"></ul>
+  </section>
+
   <section id="view-about" class="view" hidden>
     <div class="intro">
       <h2>Despre Proiect</h2>
@@ -84,6 +100,7 @@
         <li>All Watch News adună știri din alte publicații, așa că multe dintre ele sunt aceleași lansări ca în celelalte surse. Ele se comasează cu modelul existent și nu sunt numărate de două ori.</li>
         <li>Numele brandurilor au fost normalizate (de exemplu „IWC Schaffhausen” → „IWC”, „BVLGARI” → „Bulgari”).</li>
         <li>Imaginile sunt afișate direct de pe site-urile sursă și aparțin acestora. Fiecare referință are un link către pagina sau articolul original.</li>
+        <li>Peste datele colectate se aplică și corecții manuale: modele sau referințe șterse, nume și referințe corectate, modele comasate. Cifrele afișate includ aceste corecții.</li>
       </ul>
       <p class="muted">Date colectate pe 21 octombrie 2026.</p>
     </div>
@@ -102,4 +119,6 @@
 </button>
 
 <script src="data.js"></script>
+<script src="corrections-lib.js"></script>
+<script src="corrections.js"></script>
 <script src="app.js"></script>
