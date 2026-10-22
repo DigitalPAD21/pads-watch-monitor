@@ -166,5 +166,76 @@ const CORRECTIONS = [
       "HAB001 , HAB002 , HAB003 , HAB004"
     ],
     "to": "Seiko Astron GPS Chronograph"
+  },
+  {
+    "id": "d27a657a",
+    "at": "2026-10-22 15:12",
+    "type": "deleteRef",
+    "brand": "Bulgari",
+    "model": "Monete and Tubogas",
+    "refs": [],
+    "ref": "url:https://www.watchtime.com/brands/womens-watches/bulgari-monete-and-tubogas|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "85fd0a96",
+    "at": "2026-10-22 15:12",
+    "type": "deleteRef",
+    "brand": "Bulgari",
+    "model": "Octo Finissimo Perpetual Calendar Blue Titanium",
+    "refs": [],
+    "ref": "url:https://monochrome-watches.com/bulgari-octo-finissimo-perpetual-calendar-blue-titanium-worlds-thinnest-perpetual-calendar-introducing-price/|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "1eefb1bf",
+    "at": "2026-10-22 15:13",
+    "type": "deleteRef",
+    "brand": "Bulgari",
+    "model": "Titanio GMT",
+    "refs": [],
+    "ref": "url:https://www.watchcollectinglifestyle.com/home/bvlgari-titanio-gmt-review-live-photos|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "99b5977d",
+    "at": "2026-10-22 15:13",
+    "type": "deleteRef",
+    "brand": "Bulgari",
+    "model": "Titanio",
+    "refs": [],
+    "ref": "url:https://monochrome-watches.com/first-look-bulgari-bvlgari-titanio-gmt-chronograph-aluminium-geneva-watch-days-specs-price-review/|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "97efe892",
+    "at": "2026-10-22 15:14",
+    "type": "deleteRef",
+    "brand": "Bulgari",
+    "model": "Bulgari Bulgari Aluminium",
+    "refs": [],
+    "ref": "url:https://www.watchtime.com/brands/automatic-watches/bulgari-bulgari-aluminium-2026|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "8fce11be",
+    "at": "2026-10-22 15:14",
+    "type": "deleteRef",
+    "brand": "Bulgari",
+    "model": "Aluminium Summer References",
+    "refs": [],
+    "ref": "url:https://www.timeandwatches.com/2026/06/bulgari-aluminium-summer-editions-104335-104309.html|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "ce766c70",
+    "at": "2026-10-22 15:15",
+    "type": "editRef",
+    "brand": "Bulgari",
+    "model": "Aluminium Ice Blue and White",
+    "refs": [],
+    "ref": "url:https://monochrome-watches.com/new-2026-bulgari-aluminium-ice-blue-and-white-automatic-models-review-price/|",
+    "label": "Referință nespecificată",
+    "to": "104335 , 104335"
   }
 ];
