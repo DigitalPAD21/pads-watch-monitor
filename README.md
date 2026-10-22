@@ -34,6 +34,8 @@ Pornește site-ul local cu `node server.js` și deschide http://localhost:8080. 
 - Lângă numele fiecărui brand, în listă și pe pagina lui, e tag-ul **Neverificat** (implicit) / **✓ Verificat**.
   Un click pe tag comută starea. În modul editare starea se salvează în `corrections.js` și, după push, o vede
   toată lumea; pe site-ul public se reține doar în browserul vizitatorului, ca lista de Highlights.
+- La **✎ Editează** pe o referință poți scrie mai multe coduri separate prin virgulă (ex. `HAB001, HAB002`):
+  fiecare devine o referință, deci o lansare, separată. Codurile repetate sau deja prezente în model contează o dată.
 - Corecțiile se salvează în `corrections.js` și se aplică imediat: lansările și modelele se recalculează peste tot.
 - Secțiunea **Corecții** le arată pe toate, cu buton **Anulează** pentru fiecare.
 - `data.js` nu se modifică: corecțiile se aplică peste el la încărcarea paginii, așa că rămân valabile și după ce

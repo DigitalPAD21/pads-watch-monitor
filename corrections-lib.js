@@ -8,6 +8,10 @@
   const fold = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
   const norm = r => String(r || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 
+  // Mai multe referințe scrise într-un singur câmp, separate prin virgulă, punct și virgulă, „/” cu spații sau „&”.
+  // „/” fără spații rămâne parte din cod (ex. 7200/50G-012).
+  const splitRefs = text => String(text || "").split(/\s*[,;&]\s*|\s+\/\s+/).map(s => s.trim()).filter(Boolean);
+
   // Cheia unei referințe: codul ei sau, dacă nu are, linkul și varianta.
   const refKey = r => (r.ref ? norm(r.ref) : "url:" + r.url + "|" + (r.variant || ""));
   const refCodes = m => m.refs.map(r => r.ref).filter(Boolean);
@@ -48,8 +52,18 @@
           // Un model rămas fără nicio referință nu mai are nicio lansare.
           if (!m.refs.length) list = list.filter(x => x !== m);
         } else {
+          // „HAB001, HAB002” devine două referințe separate; codurile repetate sau deja existente în model contează o dată.
           const i = m.refs.indexOf(r);
-          m.refs[i] = { ...r, ref: c.to };
+          const others = new Set(m.refs.filter(x => x !== r).map(x => norm(x.ref)).filter(Boolean));
+          const seen = new Set();
+          const codes = splitRefs(c.to).filter(code => {
+            const k = norm(code);
+            if (!k || seen.has(k) || others.has(k)) return false;
+            seen.add(k);
+            return true;
+          });
+          if (!codes.length) { ok = false; reason = "Referința nouă există deja în model."; }
+          else m.refs.splice(i, 1, ...codes.map(code => ({ ...r, ref: code })));
         }
       } else if (c.type === "merge") {
         const into = findModel(list.filter(x => x !== m), c.brand, c.into, c.intoRefs);
@@ -73,7 +87,7 @@
     return { models: list, status, isVerified: brand => !!verified[fold(brand)] };
   }
 
-  const api = { apply, refKey, refCodes, findModel, fold, norm };
+  const api = { apply, refKey, refCodes, findModel, fold, norm, splitRefs };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.Corrections = api;
 })(typeof window !== "undefined" ? window : globalThis);

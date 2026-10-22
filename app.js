@@ -174,7 +174,8 @@ function refRow(r, m) {
         ${ed && ed.act === "editRef" ? `
           <form class="edit-form" data-model="${m.id}" data-ref="${esc(key)}" data-act="editRef">
             <label class="edit-label" for="edit-ref-input">Referința corectă</label>
-            <input id="edit-ref-input" class="edit-input" value="${esc(r.ref || "")}" placeholder="ex. 5322G-001" required>
+            <input id="edit-ref-input" class="edit-input" value="${esc(r.ref || "")}" placeholder="ex. 5322G-001 sau HAB001, HAB002" required>
+            <p class="edit-hint">Mai multe referințe? Separă-le cu virgulă: fiecare devine o lansare separată.</p>
             <div class="edit-actions"><button class="btn-save" type="submit">Salvează</button><button class="btn-cancel" type="button" data-act="cancel">Renunță</button></div>
           </form>` : `<p class="ref-code${r.ref ? "" : " is-unknown"}">${esc(code)}</p>`}
         ${details ? `<p class="ref-details">${esc(details)}</p>` : ""}

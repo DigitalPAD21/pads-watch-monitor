@@ -1,12 +1,12 @@
 # Referințe 2026
 
-Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
+Generat pe 2026-10-22. 2635 de referințe în 2379 de modele, 443 de branduri.
 
 - Articole legate de un model prin referință: 412
 - Articole legate prin nume: 1335
 - Referințe adăugate din articole (lipsă în The Watch Pages): 31
 - Articole fără corespondent, grupate separat: 3596 → 1681 de modele
-- Corecții manuale aplicate: 0 din 0
+- Corecții manuale aplicate: 22 din 22
 
 ## 1776 Atelier
 
@@ -1686,16 +1686,8 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
   - surse: Hodinkee („Octo Finissimo 37mm”); GPHG 2026 („Octo Finissimo 37 Satin-Polished Titanium”); Watches and Wonders („Octo Finissimo 37”); aBlogtoWatch („Octo Finissimo 37mm”); WatchTime („Octo Finissimo 37mm”); All Watch News („Octo Finissimo 37mm”); Monochrome Watches („Octo Finissimo Automatic 37mm”); All Watch News („Octo Finissimo Automatic 37mm”); Time and Watches („Octo Finissimo 37 mm BVF 100”)
 
 - **Aluminium Ice Blue and White** — 1 referință (doar din articole)
-  - referință nespecificată
+  - 104335
   - surse: Monochrome Watches („Aluminium Ice Blue and White”); All Watch News („Aluminium Ice Blue and White”)
-
-- **Aluminium Summer References** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: Time and Watches („Aluminium Summer References”)
-
-- **Bulgari Bulgari Aluminium** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: WatchTime („Bulgari Bulgari Aluminium”)
 
 - **Caracalla-Coin Secret Watch** — 1 referință (doar din articole)
   - referință nespecificată
@@ -1708,10 +1700,6 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
 - **Maglia Milanese Monete Secret Watch** — 1 referință (doar din articole)
   - referință nespecificată
   - surse: Monochrome Watches („Maglia Milanese Monete Secret Watch”); All Watch News („Maglia Milanese Monete Secret Watch”); Time and Watches („Maglia Milanese Monete”)
-
-- **Monete and Tubogas** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: WatchTime („Monete and Tubogas”)
 
 - **Octo Finissimo (x Vianney Halter)** — 1 referință (doar din articole)
   - referință nespecificată
@@ -1729,10 +1717,6 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
   - 104250
   - surse: Monochrome Watches („Octo Finissimo Minute Repeater 37mm”); Hodinkee („Octo Finissimo Minute Repeater 37mm Ref. 104250”); All Watch News („Octo Finissimo Minute Repeater 37mm”)
 
-- **Octo Finissimo Perpetual Calendar Blue Titanium** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: Monochrome Watches („Octo Finissimo Perpetual Calendar Blue Titanium”); Time and Watches („Octo Finissimo Perpetual Calendar Blue Titanium”); All Watch News („Octo Finissimo Perpetual Calendar Blue Titanium”)
-
 - **Octo Finissimo Perpetual Calendar Monochromatic Blue** — 1 referință (doar din articole)
   - referință nespecificată
   - surse: WatchTime („Octo Finissimo Perpetual Calendar Monochromatic Blue”)
@@ -1748,14 +1732,6 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
 - **Serpenti Tubogas** — 1 referință (doar din articole)
   - referință nespecificată
   - surse: Hodinkee („Serpenti Tubogas and Aeterna”); All Watch News („Serpenti Tubogas”)
-
-- **Titanio** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: Monochrome Watches („Titanio”); All Watch News („Titanio”); All Watch News („Titanio”)
-
-- **Titanio GMT** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: All Watch News („Titanio GMT”)
 
 - **Titanio GMT and Titanio Chronograph** — 1 referință (doar din articole)
   - referință nespecificată
@@ -8612,9 +8588,9 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
 
 - **Presage Classic Series Silk-Inspired Dials 38mm** — 4 referințe (doar din articole)
   - HCC001
-  - ? HCC002
+  - HCC002
   - ?HCC003
-  - ? HCC008
+  - HCC008
   - surse: Monochrome Watches („Presage Classic Series Silk-Inspired Dials 38mm”)
 
 - **Presage Cocktail Time HCB001 / HCB002 / HCB003** — 3 referințe (doar din articole)
@@ -8656,45 +8632,33 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
   - referință nespecificată
   - surse: All Watch News („1968 Diver's Automatic GMT”)
 
-- **5 Sports Diver (x Rowing Blazers x Wind Vintage)** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: All Watch News („5 Sports Diver (x Rowing Blazers x Wind Vintage)”); All Watch News („5 Sports Diver (x Rowing Blazers x Wind Vintage)”); All Watch News („5 Sports Diver (x Rowing Blazers x Wind Vintage)”); All Watch News („5 Sports Diver (x Rowing Blazers x Wind Vintage)”)
-
 - **5 Sports Honda Limited Edition** — 1 referință (doar din articole)
   - HDB010
   - surse: Monochrome Watches („5 Sports Honda Limited Edition”)
 
-- **5 Sports HUF Green** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: WatchTime („5 Sports HUF Green”); All Watch News („5 Sports HUF Green”)
-
-- **5 Sports HUF Limited Edition SRPM09 Time Sonar** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: Professional Watches („5 Sports HUF Limited Edition SRPM09 Time Sonar”)
-
 - **5 Sports SRPM09 (x HUF) Limited Edition** — 1 referință (doar din articole)
-  - referință nespecificată
+  - SRPM09
   - surse: Fratello („5 Sports SRPM09 HUF Limited Edition”); All Watch News („5 Sports SRPM09 HUF Limited Edition”); Monochrome Watches („5 Sports SRPM09 (x HUF) Limited Edition”)
 
 - **Alpinist GMT HBC007** — 1 referință (doar din articole)
   - referință nespecificată
   - surse: All Watch News („Alpinist GMT HBC007”)
 
-- **Astron 5X63 Crystal Pink and Crystal Green** — 1 referință (doar din articole)
-  - referință nespecificată
+- **Astron 5X63 Crystal Pink and Crystal Green** — 2 referințe (doar din articole)
+  - HAB005
+  - HAB006
   - surse: All Watch News („Astron 5X63 Crystal Pink and Crystal Green”)
 
-- **Astron GPS Chronograph** — 1 referință (doar din articole)
-  - referință nespecificată
+- **Seiko Astron GPS Chronograph** — 4 referințe (doar din articole) (corectat; nume anterioare: Astron GPS Chronograph)
+  - HAB001
+  - HAB002
+  - HAB003
+  - HAB004
   - surse: All Watch News („Astron GPS Chronograph”)
 
 - **Astron GPS Solar Dual-Time Chronograph 2026 Limited Editions** — 1 referință (doar din articole)
   - referință nespecificată
   - surse: Fratello („Astron GPS Solar Dual-Time Chronograph 2026 Limited Editions”); Fratello („Astron GPS Solar Dual-Time Chronograph HAB001, HAB002, HAB003 and HAB004”); All Watch News („Astron GPS Solar Dual-Time Chronograph 2026 Limited Editions”); All Watch News („Astron GPS Solar Dual-Time Chronograph”); All Watch News („Astron GPS Solar Dual-Time Chronograph”); All Watch News („Astron GPS Solar Dual-Time Chronograph”); Fratello („Astron GPS Solar Dual Time Chronograph Gray Ceramic”); All Watch News („Astron GPS Solar Dual Time Chronograph Gray Ceramic”); Fratello („Astron GPS Solar Dual-Time Chronograph Crystal Green and Crystal Pink”)
-
-- **Astron GPS Solar Limited Edition** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: All Watch News („Astron GPS Solar Limited Edition”)
 
 - **Chronograph Vintage** — 1 referință (doar din articole)
   - referință nespecificată
@@ -8712,13 +8676,9 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
   - HKF001
   - surse: Fratello („King Seiko Vanac Titanium”); All Watch News („King Seiko VANAC Titanium”); GPHG 2026 („King Seiko VANAC”)
 
-- **Pandagraph** — 1 referință (doar din articole)
+- **Power Design Project Collection 2 HHK001 and HHK002 "Panda Dial"** — 1 referință (doar din articole) (corectat; nume anterioare: Pandagraph)
   - referință nespecificată
-  - surse: Fratello („Pandagraph”); All Watch News („Pandagraph”); All Watch News („Pandagraph”)
-
-- **Power Design Project Collection 2 HHK001 and HHK002 "Panda Dial"** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: aBlogtoWatch („Power Design Project Collection 2 HHK001 and HHK002 "Panda Dial"”); All Watch News („Power Design Project Collection 2 HHK001 and HHK002 'Panda Dial'”); All Watch News („Power Design Project Collection 2 HHK001 and HHK002 'Panda Dial'”); All Watch News („Power Design Project Collection 2 HHK001 and HHK002 'Pandagraph'”)
+  - surse: aBlogtoWatch („Power Design Project Collection 2 HHK001 and HHK002 "Panda Dial"”); All Watch News („Power Design Project Collection 2 HHK001 and HHK002 'Panda Dial'”); All Watch News („Power Design Project Collection 2 HHK001 and HHK002 'Panda Dial'”); All Watch News („Power Design Project Collection 2 HHK001 and HHK002 'Pandagraph'”); Fratello („Pandagraph”); All Watch News („Pandagraph”); All Watch News („Pandagraph”)
 
 - **Presage "Silver Bullet" GMT Cocktail Time** — 1 referință (doar din articole)
   - referință nespecificată
@@ -8731,10 +8691,6 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
 - **Presage Classic HCC009J1 (x Tradman's Bonsai)** — 1 referință (doar din articole)
   - HCC009J1
   - surse: Monochrome Watches („Presage Classic Series x Tradman's Bonsai Limited Edition HCC009J1”); All Watch News („Presage Classic HCC009J1 (x Tradman's Bonsai)”); All Watch News („Presage Classic HCC009J1 (x Tradman's Bonsai)”); WatchTime („Presage Classic Series Tradman's Bonsai”); All Watch News („Presage Classic Series HCC009 (x Tradman's)”); All Watch News („Presage Classic Series HCC009 (x Tradman's)”); All Watch News („Presage Classic Series HCC009 (x Tradman's)”)
-
-- **Presage Classic HCC009J1 Bonsai** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: Fratello („Presage Classic HCC009J1 Bonsai”)
 
 - **Presage Classic Series Arita Porcelain and Silk-Inspired Dial Limited Editions** — 1 referință (doar din articole)
   - referință nespecificată
@@ -8800,25 +8756,13 @@ Generat pe 2026-10-21. 2646 de referințe în 2394 de modele, 443 de branduri.
   - referință nespecificată
   - surse: Fratello („Rotocall 145th Anniversary Purple”)
 
-- **Rowing Blazers Collaboration (x Rowing Blazers)** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: WatchTime („Rowing Blazers Collaboration (x Rowing Blazers)”)
-
 - **Seiko 5 Rally Diver 38mm Green & 42mm Blue (x Rowing Blazers x Wind Vintage)** — 1 referință (doar din articole)
   - referință nespecificată
   - surse: aBlogtoWatch („Seiko 5 Rally Diver 38mm Green & 42mm Blue (x Rowing Blazers x Wind Vintage)”)
 
-- **Seiko 5 Sports Divers (x Wind Vintage x Rowing Blazers)** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: Fratello („Seiko 5 Sports Divers (x Wind Vintage x Rowing Blazers)”)
-
 - **Seiko 5 Sports Field Series Compass Bezel** — 1 referință (doar din articole)
   - referință nespecificată
   - surse: All Watch News („Seiko 5 Sports Field Series Compass Bezel”); All Watch News („Seiko 5 Sports Field Series Compass Bezel”); All Watch News („Seiko 5 Sports Field Series Compass Bezel”); All Watch News („Seiko 5 Sports Field Series Compass Bezel”); Monochrome Watches („5 Sports Field Series Compass Bezel”); WatchTime („5 Sports Field Series Compass Bezel”); Monochrome Watches („5 Sports Field Series”)
-
-- **Seiko 5 Sports Motocompo Limited Edition (x Honda)** — 1 referință (doar din articole)
-  - referință nespecificată
-  - surse: All Watch News („5 Sports Motocompo Limited Edition”); All Watch News („5 Sports Motocompo Limited Edition”); All Watch News („5 Sports Motocompo Limited Edition”); All Watch News („5 Sports Motocompo Limited Edition”); WatchTime („Seiko 5 Sports Motocompo”); Fratello („Seiko 5 Sports Motocompo Limited Edition (x Honda)”)
 
 - **Seiko 5 Sports Thong Sia Group Exclusive Limited Edition** — 1 referință (doar din articole)
   - referință nespecificată
