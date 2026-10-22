@@ -15,9 +15,9 @@
   --bad-fg: #7a2a20;
   --warn-bg: #f6ead0;
   --warn-fg: #6b4a0e;
-  --ok-bg: #e7f1e8;
-  --ok-fg: #2f6b3a;
-  --ok-line: #b9d6bd;
+  --ok-bg: #c9edcc;
+  --ok-fg: #1d5a28;
+  --ok-line: #96d39d;
   --display: "Cormorant Garamond", Georgia, serif;
   --body: "Source Sans 3", system-ui, sans-serif;
 }
@@ -37,9 +37,9 @@
     --bad-fg: #f0b3aa;
     --warn-bg: #3a3020;
     --warn-fg: #ecd29a;
-    --ok-bg: #1d3324;
-    --ok-fg: #9fd3a9;
-    --ok-line: #335c3e;
+    --ok-bg: #2c5a36;
+    --ok-fg: #d2f4d6;
+    --ok-line: #4a8a57;
     color-scheme: dark;
   }
 }
@@ -58,9 +58,9 @@
   --bad-fg: #f0b3aa;
   --warn-bg: #3a3020;
   --warn-fg: #ecd29a;
-  --ok-bg: #1d3324;
-  --ok-fg: #9fd3a9;
-  --ok-line: #335c3e;
+  --ok-bg: #2c5a36;
+  --ok-fg: #d2f4d6;
+  --ok-line: #4a8a57;
   color-scheme: dark;
 }
 
@@ -422,7 +422,8 @@ body {
 }
 .vtag.is-verified { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ok-fg); }
 button.vtag { cursor: pointer; }
-button.vtag:hover { border-color: var(--gold); }
+button.vtag:hover { border-color: var(--gold); color: var(--ink); }
+button.vtag.is-verified:hover { border-color: var(--ok-fg); color: var(--ok-fg); }
 button.vtag:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 #brand-title .vtag { font-size: 11.5px; position: relative; top: -3px; }
 

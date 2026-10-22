@@ -14,12 +14,20 @@ let corrections = typeof CORRECTIONS !== "undefined" ? CORRECTIONS : [];
 let correctionStatus = [];
 let models = [];
 let brandBySlug = {};
-let isVerified = () => false;
+// Starea „Verificat” a brandurilor: cea publicată în corrections.js (setată din modul editare)
+// și, pe site-ul public, cea notată de vizitator în propriul browser, care o are prioritate.
+let fileVerified = () => false;
+const VER_KEY = "pads-watch-monitor:verified";
+const localVerified = (() => {
+  try { return JSON.parse(localStorage.getItem(VER_KEY) || "{}"); } catch { return {}; }
+})();
+const isVerified = brand => !editMode && Object.prototype.hasOwnProperty.call(localVerified, brand)
+  ? localVerified[brand] : fileVerified(brand);
 function rebuild() {
   const r = Corrections.apply(baseModels, corrections);
   models = r.models.map((m, i) => ({ ...m, id: i }));
   correctionStatus = r.status;
-  isVerified = r.isVerified;
+  fileVerified = r.isVerified;
   brandBySlug = Object.fromEntries([...new Set(models.map(m => m.brand))].map(b => [slug(b), b]));
 }
 
@@ -83,14 +91,13 @@ rebuild();
 
 const $ = id => document.getElementById(id);
 
-// Tag-ul „Verificat” / „Neverificat” de lângă numele brandului. În modul editare e buton și comută starea.
+// Tag-ul „Verificat” / „Neverificat” de lângă numele brandului: un click comută starea.
+// În modul editare starea se publică (corrections.js); altfel se reține doar în acest browser.
 function statusTag(brand) {
   const on = isVerified(brand);
-  const label = on ? "Verificat" : "Neverificat";
-  const cls = `vtag${on ? " is-verified" : ""}`;
-  return editMode
-    ? `<button class="${cls}" type="button" data-verify="${esc(brand)}" aria-pressed="${on}" title="Apasă ca să marchezi ${on ? "Neverificat" : "Verificat"}">${on ? "✓ " : ""}${label}</button>`
-    : `<span class="${cls}" title="Lista de lansări a brandului ${on ? "a fost" : "nu a fost încă"} verificată manual">${on ? "✓ " : ""}${label}</span>`;
+  const where = editMode ? "Se salvează în corrections.js." : "Se reține în acest browser.";
+  return `<button class="vtag${on ? " is-verified" : ""}" type="button" data-verify="${esc(brand)}" aria-pressed="${on}"
+    title="Apasă ca să marchezi ${on ? "Neverificat" : "Verificat"}. ${where}">${on ? "✓ Verificat" : "Neverificat"}</button>`;
 }
 
 function renderChips() {
@@ -592,12 +599,18 @@ $("corr-list").addEventListener("click", e => {
   if (brand) showView("brand", brand.dataset.brand);
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && editing) { editing = null; rerender(); } });
-// Comutarea Verificat / Neverificat, din listă sau de pe pagina brandului (doar în modul editare).
+// Comutarea Verificat / Neverificat, din listă sau de pe pagina brandului.
 document.addEventListener("click", e => {
   const tag = e.target.closest("button.vtag");
-  if (!tag || !editMode) return;
+  if (!tag) return;
   e.stopPropagation();
-  sendCorrection({ add: { type: "brandStatus", brand: tag.dataset.verify, verified: !isVerified(tag.dataset.verify) } });
+  const brand = tag.dataset.verify;
+  const next = !isVerified(brand);
+  if (editMode) return sendCorrection({ add: { type: "brandStatus", brand, verified: next } });
+  // Pe site-ul public: notița rămâne în browserul vizitatorului, ca lista de Highlights.
+  if (next === fileVerified(brand)) delete localVerified[brand]; else localVerified[brand] = next;
+  try { localStorage.setItem(VER_KEY, JSON.stringify(localVerified)); } catch {}
+  rerender();
 });
 
 // Butonul „Înapoi sus” apare după ce pagina a coborât peste un ecran.
