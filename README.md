@@ -31,7 +31,8 @@ Pornește site-ul local cu `node server.js` și deschide http://localhost:8080. 
 **Corecții** în header. Pe pagina unui brand, fiecare model are butoanele **✎ Redenumește**, **⇄ Comasează** și
 **🗑 Șterge modelul**, iar fiecare referință are **✎ Editează** și **🗑 Șterge**.
 
-- Lângă numele fiecărui brand, în listă și pe pagina lui, e tag-ul **Neverificat** (implicit) / **✓ Verificat**.
+- Deasupra numelui fiecărui brand, în listă și pe pagina lui, e tag-ul **Neverificat** (implicit) / **✓ Verificat**,
+  cu data verificării alături. După revenirea la „Neverificat” rămâne vizibilă „ultima verificare” cu data ei.
   Un click pe tag comută starea. În modul editare starea se salvează în `corrections.js` și, după push, o vede
   toată lumea; pe site-ul public se reține doar în browserul vizitatorului, ca lista de Highlights.
 - La **✎ Editează** pe o referință poți scrie mai multe coduri separate prin virgulă (ex. `HAB001, HAB002`):

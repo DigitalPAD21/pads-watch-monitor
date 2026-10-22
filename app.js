@@ -16,18 +16,27 @@ let models = [];
 let brandBySlug = {};
 // Starea „Verificat” a brandurilor: cea publicată în corrections.js (setată din modul editare)
 // și, pe site-ul public, cea notată de vizitator în propriul browser, care o are prioritate.
-let fileVerified = () => false;
+let fileState = () => ({ verified: false, last: null });
 const VER_KEY = "pads-watch-monitor:verified";
+// În browser: brand -> { verified, last } (last = data ultimei verificări). Formatul vechi (true/false) e acceptat.
 const localVerified = (() => {
-  try { return JSON.parse(localStorage.getItem(VER_KEY) || "{}"); } catch { return {}; }
+  try {
+    const raw = JSON.parse(localStorage.getItem(VER_KEY) || "{}");
+    for (const [b, v] of Object.entries(raw)) if (typeof v === "boolean") raw[b] = { verified: v, last: null };
+    return raw;
+  } catch { return {}; }
 })();
-const isVerified = brand => !editMode && Object.prototype.hasOwnProperty.call(localVerified, brand)
-  ? localVerified[brand] : fileVerified(brand);
+const brandState = brand => !editMode && Object.prototype.hasOwnProperty.call(localVerified, brand)
+  ? localVerified[brand] : fileState(brand);
+const isVerified = brand => brandState(brand).verified;
+const nowStamp = () => { const d = new Date(), p = n => String(n).padStart(2, "0"); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+// „2026-10-22 15:12” -> „22.10.2026”
+const shortDate = s => { const m = String(s || "").match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? `${m[3]}.${m[2]}.${m[1]}` : ""; };
 function rebuild() {
   const r = Corrections.apply(baseModels, corrections);
   models = r.models.map((m, i) => ({ ...m, id: i }));
   correctionStatus = r.status;
-  fileVerified = r.isVerified;
+  fileState = r.brandState;
   brandBySlug = Object.fromEntries([...new Set(models.map(m => m.brand))].map(b => [slug(b), b]));
 }
 
@@ -93,11 +102,16 @@ const $ = id => document.getElementById(id);
 
 // Tag-ul „Verificat” / „Neverificat” de lângă numele brandului: un click comută starea.
 // În modul editare starea se publică (corrections.js); altfel se reține doar în acest browser.
+// Lângă tag: data verificării, sau, după revenirea la „Neverificat”, data ultimei verificări.
 function statusTag(brand) {
-  const on = isVerified(brand);
+  const st = brandState(brand);
+  const on = st.verified;
   const where = editMode ? "Se salvează în corrections.js." : "Se reține în acest browser.";
-  return `<button class="vtag${on ? " is-verified" : ""}" type="button" data-verify="${esc(brand)}" aria-pressed="${on}"
-    title="Apasă ca să marchezi ${on ? "Neverificat" : "Verificat"}. ${where}">${on ? "✓ Verificat" : "Neverificat"}</button>`;
+  const date = shortDate(st.last);
+  const note = date ? (on ? date : `ultima verificare ${date}`) : "";
+  return `<span class="vgroup"><button class="vtag${on ? " is-verified" : ""}" type="button" data-verify="${esc(brand)}" aria-pressed="${on}"
+    title="Apasă ca să marchezi ${on ? "Neverificat" : "Verificat"}. ${where}">${on ? "✓ Verificat" : "Neverificat"}</button>${
+    note ? `<span class="vdate" title="${esc(st.last)}">${esc(note)}</span>` : ""}</span>`;
 }
 
 function renderChips() {
@@ -138,7 +152,8 @@ function renderList() {
     }
     return `<li>
       <span class="rank">${rank}.</span>
-      <span class="line"><button class="brand-link" data-brand="${esc(brand)}">${esc(brand)}</button> ${statusTag(brand)} - <span class="n">${lansari(b.refs)}</span> - <span class="n">${plural(b.models, "model", "modele")}</span></span>
+      <span class="vline">${statusTag(brand)}</span>
+      <span class="line"><button class="brand-link" data-brand="${esc(brand)}">${esc(brand)}</button> - <span class="n">${lansari(b.refs)}</span> - <span class="n">${plural(b.models, "model", "modele")}</span></span>
       <span class="bar"><i style="width:${(b.refs / max) * 100}%"></i></span>
       ${parts.length ? `<span class="split">${parts.join(" · ")}</span>` : ""}
     </li>`;
@@ -254,7 +269,8 @@ function renderBrand(brand) {
     ? (list.length ? `${plural(list.length, "model găsit", "modele găsite")} din ${shown.length}` : "")
     : "";
   const refs = all.reduce((n, m) => n + m.refs.length, 0);
-  $("brand-title").innerHTML = `${esc(brand)} ${statusTag(brand)}`;
+  $("brand-vtag").innerHTML = statusTag(brand);
+  $("brand-title").textContent = brand;
   $("brand-meta").textContent = `${lansari(refs)} (referințe) în ${plural(all.length, "model", "modele")} · ${current === "all" ? "toate sursele" : SOURCES.find(s => s.id === current).name}`;
   $("brand-filters").innerHTML = `
     <button class="chip${onlyHighlights ? "" : " is-active"}" data-filter="all">Toate modelele (${all.length})</button>
@@ -609,7 +625,9 @@ document.addEventListener("click", e => {
   const next = !isVerified(brand);
   if (editMode) return sendCorrection({ add: { type: "brandStatus", brand, verified: next } });
   // Pe site-ul public: notița rămâne în browserul vizitatorului, ca lista de Highlights.
-  if (next === fileVerified(brand)) delete localVerified[brand]; else localVerified[brand] = next;
+  // „Verificat” primește data de azi; „Neverificat” păstrează data ultimei verificări.
+  const prev = brandState(brand);
+  localVerified[brand] = next ? { verified: true, last: nowStamp() } : { verified: false, last: prev.last || null };
   try { localStorage.setItem(VER_KEY, JSON.stringify(localVerified)); } catch {}
   rerender();
 });

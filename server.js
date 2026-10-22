@@ -21,6 +21,12 @@ function writeCorrections(list) {
   fs.writeFileSync(CORRECTIONS_FILE, HEADER + "const CORRECTIONS = " + JSON.stringify(list, null, 2) + ";\n");
 }
 
+// Data și ora după ceasul calculatorului (nu UTC), ca în pagină: „2026-10-22 19:01”.
+const localStamp = () => {
+  const d = new Date(), p = n => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+};
+
 const json = (res, code, body) => {
   res.writeHead(code, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
   res.end(JSON.stringify(body));
@@ -47,11 +53,15 @@ function handleApi(req, res) {
       if (msg.add) {
         const c = msg.add;
         if (!TYPES.has(c.type) || !c.brand || (c.type !== "brandStatus" && !c.model)) return json(res, 400, { error: "Corecție incompletă." });
-        const entry = { id: crypto.randomUUID().slice(0, 8), at: new Date().toISOString().slice(0, 16).replace("T", " "), ...c };
+        const entry = { id: crypto.randomUUID().slice(0, 8), at: localStamp(), ...c };
         if (c.type === "brandStatus") {
-          // O singură stare per brand: „Verificat” se păstrează, revenirea la „Neverificat” (implicit) doar o șterge.
+          // O singură stare per brand. „Verificat” reține data (câmpul at); la revenirea la „Neverificat”
+          // se păstrează data ultimei verificări, ca să se vadă când a fost făcut ultimul review.
+          const prev = list.filter(x => x.type === "brandStatus" && x.brand === c.brand).pop();
+          const lastVerified = prev ? (prev.verified ? prev.at : prev.lastVerified) : null;
           for (let i = list.length - 1; i >= 0; i--) if (list[i].type === "brandStatus" && list[i].brand === c.brand) list.splice(i, 1);
           if (c.verified) list.push({ ...entry, verified: true });
+          else if (lastVerified) list.push({ ...entry, verified: false, lastVerified });
         } else list.push(entry);
       } else if (msg.remove) {
         const i = list.findIndex(c => c.id === msg.remove);

@@ -30,10 +30,11 @@
     let list = models.map(m => ({ ...m, refs: [...m.refs], coverage: [...m.coverage], aliases: [...(m.aliases || [])] }));
     const status = [];
     // Starea de verificare a fiecărui brand („Verificat” / „Neverificat”); lipsa unei corecții înseamnă „Neverificat”.
+    // last = data ultimei verificări: data corecției când e „Verificat”, altfel cea păstrată din verificarea anterioară.
     const verified = {};
     for (const c of corrections || []) {
       if (c.type === "brandStatus") {
-        verified[fold(c.brand)] = !!c.verified;
+        verified[fold(c.brand)] = { verified: !!c.verified, last: c.verified ? c.at : (c.lastVerified || null) };
         status.push({ id: c.id, applied: true, reason: "" });
         continue;
       }
@@ -84,7 +85,11 @@
       } else { ok = false; reason = "Tip de corecție necunoscut."; }
       status.push({ id: c.id, applied: ok, reason });
     }
-    return { models: list, status, isVerified: brand => !!verified[fold(brand)] };
+    return {
+      models: list, status,
+      isVerified: brand => !!(verified[fold(brand)] && verified[fold(brand)].verified),
+      brandState: brand => verified[fold(brand)] || { verified: false, last: null }
+    };
   }
 
   const api = { apply, refKey, refCodes, findModel, fold, norm, splitRefs };
