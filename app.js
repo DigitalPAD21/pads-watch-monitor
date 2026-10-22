@@ -14,10 +14,12 @@ let corrections = typeof CORRECTIONS !== "undefined" ? CORRECTIONS : [];
 let correctionStatus = [];
 let models = [];
 let brandBySlug = {};
+let isVerified = () => false;
 function rebuild() {
   const r = Corrections.apply(baseModels, corrections);
   models = r.models.map((m, i) => ({ ...m, id: i }));
   correctionStatus = r.status;
+  isVerified = r.isVerified;
   brandBySlug = Object.fromEntries([...new Set(models.map(m => m.brand))].map(b => [slug(b), b]));
 }
 
@@ -81,6 +83,16 @@ rebuild();
 
 const $ = id => document.getElementById(id);
 
+// Tag-ul „Verificat” / „Neverificat” de lângă numele brandului. În modul editare e buton și comută starea.
+function statusTag(brand) {
+  const on = isVerified(brand);
+  const label = on ? "Verificat" : "Neverificat";
+  const cls = `vtag${on ? " is-verified" : ""}`;
+  return editMode
+    ? `<button class="${cls}" type="button" data-verify="${esc(brand)}" aria-pressed="${on}" title="Apasă ca să marchezi ${on ? "Neverificat" : "Verificat"}">${on ? "✓ " : ""}${label}</button>`
+    : `<span class="${cls}" title="Lista de lansări a brandului ${on ? "a fost" : "nu a fost încă"} verificată manual">${on ? "✓ " : ""}${label}</span>`;
+}
+
 function renderChips() {
   // Sursele fără nicio lansare (ex. GMT Post) apar doar în „Despre Proiect”.
   const chips = [{ id: "all", name: "Toate sursele" }, ...SOURCES.filter(s => models.some(m => covers(m, s.id)))];
@@ -119,7 +131,7 @@ function renderList() {
     }
     return `<li>
       <span class="rank">${rank}.</span>
-      <span class="line"><button class="brand-link" data-brand="${esc(brand)}">${esc(brand)}</button> - <span class="n">${lansari(b.refs)}</span> - <span class="n">${plural(b.models, "model", "modele")}</span></span>
+      <span class="line"><button class="brand-link" data-brand="${esc(brand)}">${esc(brand)}</button> ${statusTag(brand)} - <span class="n">${lansari(b.refs)}</span> - <span class="n">${plural(b.models, "model", "modele")}</span></span>
       <span class="bar"><i style="width:${(b.refs / max) * 100}%"></i></span>
       ${parts.length ? `<span class="split">${parts.join(" · ")}</span>` : ""}
     </li>`;
@@ -234,7 +246,7 @@ function renderBrand(brand) {
     ? (list.length ? `${plural(list.length, "model găsit", "modele găsite")} din ${shown.length}` : "")
     : "";
   const refs = all.reduce((n, m) => n + m.refs.length, 0);
-  $("brand-title").textContent = brand;
+  $("brand-title").innerHTML = `${esc(brand)} ${statusTag(brand)}`;
   $("brand-meta").textContent = `${lansari(refs)} (referințe) în ${plural(all.length, "model", "modele")} · ${current === "all" ? "toate sursele" : SOURCES.find(s => s.id === current).name}`;
   $("brand-filters").innerHTML = `
     <button class="chip${onlyHighlights ? "" : " is-active"}" data-filter="all">Toate modelele (${all.length})</button>
@@ -364,7 +376,8 @@ const describe = c => ({
   renameModel: () => `Redenumit „${c.model}” în „${c.to}”`,
   deleteRef: () => `Ștearsă referința ${c.label || c.ref} din „${c.model}”`,
   editRef: () => `Referința ${c.label || c.ref} corectată în ${c.to} („${c.model}”)`,
-  merge: () => `Comasat „${c.model}” în „${c.into}”`
+  merge: () => `Comasat „${c.model}” în „${c.into}”`,
+  brandStatus: () => `Brandul marcat ${c.verified ? "Verificat" : "Neverificat"}`
 }[c.type] || (() => c.type))();
 
 function renderCorrections() {
@@ -579,6 +592,13 @@ $("corr-list").addEventListener("click", e => {
   if (brand) showView("brand", brand.dataset.brand);
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && editing) { editing = null; rerender(); } });
+// Comutarea Verificat / Neverificat, din listă sau de pe pagina brandului (doar în modul editare).
+document.addEventListener("click", e => {
+  const tag = e.target.closest("button.vtag");
+  if (!tag || !editMode) return;
+  e.stopPropagation();
+  sendCorrection({ add: { type: "brandStatus", brand: tag.dataset.verify, verified: !isVerified(tag.dataset.verify) } });
+});
 
 // Butonul „Înapoi sus” apare după ce pagina a coborât peste un ecran.
 const toTop = $("to-top");

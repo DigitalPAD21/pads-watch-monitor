@@ -31,6 +31,8 @@ Pornește site-ul local cu `node server.js` și deschide http://localhost:8080. 
 **Corecții** în header. Pe pagina unui brand, fiecare model are butoanele **✎ Redenumește**, **⇄ Comasează** și
 **🗑 Șterge modelul**, iar fiecare referință are **✎ Editează** și **🗑 Șterge**.
 
+- Lângă numele fiecărui brand, în listă și pe pagina lui, e tag-ul **Neverificat** (implicit) / **✓ Verificat**.
+  În modul editare, un click pe tag comută starea; pe site-ul public tag-ul doar se afișează.
 - Corecțiile se salvează în `corrections.js` și se aplică imediat: lansările și modelele se recalculează peste tot.
 - Secțiunea **Corecții** le arată pe toate, cu buton **Anulează** pentru fiecare.
 - `data.js` nu se modifică: corecțiile se aplică peste el la încărcarea paginii, așa că rămân valabile și după ce

@@ -10,7 +10,7 @@ const root = __dirname;
 const CORRECTIONS_FILE = path.join(root, "corrections.js");
 const HEADER = "// Corecțiile manuale, în ordinea în care au fost făcute. Se editează din modul editare (node server.js)\n" +
   "// sau de mână; vezi corrections-lib.js pentru ce înseamnă fiecare tip.\n";
-const TYPES = new Set(["deleteModel", "renameModel", "deleteRef", "editRef", "merge"]);
+const TYPES = new Set(["deleteModel", "renameModel", "deleteRef", "editRef", "merge", "brandStatus"]);
 
 function readCorrections() {
   const src = fs.readFileSync(CORRECTIONS_FILE, "utf8");
@@ -46,8 +46,13 @@ function handleApi(req, res) {
       const list = readCorrections();
       if (msg.add) {
         const c = msg.add;
-        if (!TYPES.has(c.type) || !c.brand || !c.model) return json(res, 400, { error: "Corecție incompletă." });
-        list.push({ id: crypto.randomUUID().slice(0, 8), at: new Date().toISOString().slice(0, 16).replace("T", " "), ...c });
+        if (!TYPES.has(c.type) || !c.brand || (c.type !== "brandStatus" && !c.model)) return json(res, 400, { error: "Corecție incompletă." });
+        const entry = { id: crypto.randomUUID().slice(0, 8), at: new Date().toISOString().slice(0, 16).replace("T", " "), ...c };
+        if (c.type === "brandStatus") {
+          // O singură stare per brand: „Verificat” se păstrează, revenirea la „Neverificat” (implicit) doar o șterge.
+          for (let i = list.length - 1; i >= 0; i--) if (list[i].type === "brandStatus" && list[i].brand === c.brand) list.splice(i, 1);
+          if (c.verified) list.push({ ...entry, verified: true });
+        } else list.push(entry);
       } else if (msg.remove) {
         const i = list.findIndex(c => c.id === msg.remove);
         if (i < 0) return json(res, 404, { error: "Corecția nu există." });

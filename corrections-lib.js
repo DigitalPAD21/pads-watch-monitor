@@ -25,7 +25,14 @@
   function apply(models, corrections) {
     let list = models.map(m => ({ ...m, refs: [...m.refs], coverage: [...m.coverage], aliases: [...(m.aliases || [])] }));
     const status = [];
+    // Starea de verificare a fiecărui brand („Verificat” / „Neverificat”); lipsa unei corecții înseamnă „Neverificat”.
+    const verified = {};
     for (const c of corrections || []) {
+      if (c.type === "brandStatus") {
+        verified[fold(c.brand)] = !!c.verified;
+        status.push({ id: c.id, applied: true, reason: "" });
+        continue;
+      }
       const m = findModel(list, c.brand, c.model, c.refs);
       if (!m) { status.push({ id: c.id, applied: false, reason: "Modelul nu mai există în date." }); continue; }
       let ok = true, reason = "";
@@ -63,7 +70,7 @@
       } else { ok = false; reason = "Tip de corecție necunoscut."; }
       status.push({ id: c.id, applied: ok, reason });
     }
-    return { models: list, status };
+    return { models: list, status, isVerified: brand => !!verified[fold(brand)] };
   }
 
   const api = { apply, refKey, refCodes, findModel, fold, norm };
