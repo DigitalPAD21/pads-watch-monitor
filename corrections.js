@@ -237,5 +237,113 @@ const CORRECTIONS = [
     "ref": "url:https://monochrome-watches.com/new-2026-bulgari-aluminium-ice-blue-and-white-automatic-models-review-price/|",
     "label": "Referință nespecificată",
     "to": "104335 , 104335"
+  },
+  {
+    "id": "d8f1bb4f",
+    "at": "2026-10-22 15:52",
+    "type": "editRef",
+    "brand": "Bulgari",
+    "model": "Aluminium Ice Blue and White",
+    "refs": [
+      "104335"
+    ],
+    "ref": "104335",
+    "label": "104335",
+    "to": "104335 , 104309"
+  },
+  {
+    "id": "63ef1b54",
+    "at": "2026-10-22 15:53",
+    "type": "deleteModel",
+    "brand": "Bulgari",
+    "model": "Octo Finissimo Dual Time (x Vianney Halter)",
+    "refs": []
+  },
+  {
+    "id": "4205fa16",
+    "at": "2026-10-26 16:45",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Master Control Chronometre Collection",
+    "refs": [],
+    "ref": "url:https://monochrome-watches.com/jaeger-lecoultre-master-control-chronometre-collection-integrated-bracelet-2026-price-review/|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "400a8a04",
+    "at": "2026-10-26 16:47",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Reverso The Collectibles 5th Capsule Collection",
+    "refs": [],
+    "ref": "url:https://www.watchtime.com/brands/vintage/jaeger-lecoultre-the-collectibles-5th-capsule-collection|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "311b386b",
+    "at": "2026-10-26 16:47",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Reverso Hokusai Waterfall Series",
+    "refs": [],
+    "ref": "url:https://timeandtidewatches.com/jaeger-lecoultre-reverso-hokusai-waterfall-series-introducing/|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "7a2b6262",
+    "at": "2026-10-26 16:47",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Reverso Baguette",
+    "refs": [],
+    "ref": "url:https://watchesbysjx.com/2026/05/jaeger-lecoultre-reverso-tribute-or-deco-cocktail.html|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "bfacd44c",
+    "at": "2026-10-26 16:47",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Master Hybris Mechanica Ultra Thin Minute Repeater",
+    "refs": [],
+    "ref": "url:https://monochrome-watches.com/jaeger-lecoultre-master-hybris-mechanica-ultra-thin-minute-repeater-tourbillon-introducing/|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "e10ca070",
+    "at": "2026-10-26 16:49",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Duometre Heliotourbillon Perpetual Calendar Platinum",
+    "refs": [],
+    "ref": "url:https://www.ablogtowatch.com/mesmerizing-jaeger-lecoultre-duometre-heliotourbillon-perpetual-calendar-platinum-watch-hands-on/|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "f75d57ec",
+    "at": "2026-10-26 16:50",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Gyrotourbillon à Stratosphère",
+    "refs": [],
+    "ref": "url:https://watchesbysjx.com/2026/04/jaeger-lecoultre-gyrotourbillon-a-stratosphere-review.html|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "689315ac",
+    "at": "2026-10-26 16:50",
+    "type": "deleteRef",
+    "brand": "Jaeger-LeCoultre",
+    "model": "Marc Newson Atmos and Memovox",
+    "refs": [],
+    "ref": "url:https://timeandtidewatches.com/jaeger-lecoultre-marc-newson-atmos-introducing/|",
+    "label": "Referință nespecificată"
+  },
+  {
+    "id": "0d03cccd",
+    "at": "2026-10-26 16:51",
+    "type": "brandStatus",
+    "brand": "Jaeger-LeCoultre",
+    "verified": true
   }
 ];
