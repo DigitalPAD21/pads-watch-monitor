@@ -33,8 +33,8 @@ Pornește site-ul local cu `node server.js` și deschide http://localhost:8080. 
 
 - Deasupra numelui fiecărui brand, în listă și pe pagina lui, e tag-ul **Neverificat** (implicit) / **✓ Verificat**,
   cu data verificării alături. După revenirea la „Neverificat” rămâne vizibilă „ultima verificare” cu data ei.
-  Un click pe tag comută starea. În modul editare starea se salvează în `corrections.js` și, după push, o vede
-  toată lumea; pe site-ul public se reține doar în browserul vizitatorului, ca lista de Highlights.
+  Starea se schimbă doar în modul editare (click pe tag), se salvează în `corrections.js` și, după push, o vede
+  toată lumea. Pe site-ul public și pe claude.ai tag-ul e doar o etichetă și nu poate fi schimbat.
 - La **✎ Editează** pe o referință poți scrie mai multe coduri separate prin virgulă (ex. `HAB001, HAB002`):
   fiecare devine o referință, deci o lansare, separată. Codurile repetate sau deja prezente în model contează o dată.
 - Corecțiile se salvează în `corrections.js` și se aplică imediat: lansările și modelele se recalculează peste tot.
