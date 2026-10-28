@@ -27,8 +27,8 @@ Apoi deschide http://localhost:8080.
 
 ## Corecții manuale (mod editare)
 
-Pornește site-ul local cu `node server.js` și deschide http://localhost:8080. Apare banda „Mod editare” și butonul
-**Corecții** în header. Pe pagina unui brand, fiecare model are butoanele **✎ Redenumește**, **⇄ Comasează** și
+Pornește site-ul local cu `node server.js` și deschide http://localhost:8080. Apare banda „Mod editare”, butoanele
+**Despre Proiect** și **Corecții** în header și filtrele pe surse deasupra căutării. Pe site-ul public acestea nu apar. Pe pagina unui brand, fiecare model are butoanele **✎ Redenumește**, **⇄ Comasează** și
 **🗑 Șterge modelul**, iar fiecare referință are **✎ Editează** și **🗑 Șterge**.
 
 - Deasupra numelui fiecărui brand, în listă și pe pagina lui, e tag-ul **Neverificat** (implicit) / **✓ Verificat**,

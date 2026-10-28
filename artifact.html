@@ -10,7 +10,7 @@
     <nav class="tabs" role="tablist">
       <button class="tab is-active" data-view="stats" role="tab" aria-selected="true">2026</button>
       <button class="tab" data-view="highlights" role="tab" aria-selected="false">Highlights <span class="tab-count" id="hl-tab-count" hidden></span></button>
-      <button class="tab" data-view="about" role="tab" aria-selected="false">Despre Proiect</button>
+      <button class="tab tab-edit" id="about-tab" data-view="about" role="tab" aria-selected="false" hidden>Despre Proiect</button>
       <button class="tab tab-edit" id="corr-tab" data-view="corrections" role="tab" aria-selected="false" hidden>Corecții</button>
     </nav>
   </div>
@@ -33,7 +33,7 @@
     <div class="kpis" id="kpis"></div>
 
     <div class="controls">
-      <div class="chips" id="source-chips"></div>
+      <div class="chips" id="source-chips" hidden></div>
       <input type="search" id="search" placeholder="Caută brand…" aria-label="Caută brand">
     </div>
 

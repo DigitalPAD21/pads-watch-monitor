@@ -507,8 +507,12 @@ async function detectEditMode() {
   document.body.classList.add("is-editing");
   $("edit-banner").hidden = false;
   $("corr-tab").hidden = false;
+  // Filtrele pe surse și „Despre Proiect” sunt unelte de lucru: apar doar pe site-ul local.
+  $("about-tab").hidden = false;
+  $("source-chips").hidden = false;
   rerender();
   if (location.hash.slice(1) === "corectii") showView("corrections");
+  if (location.hash.slice(1) === "despre") showView("about");
 }
 
 // Numărul de pe butonul din header.
@@ -636,7 +640,7 @@ renderHlTab();
 function route() {
   const h = location.hash.slice(1);
   if (brandBySlug[h]) showView("brand", brandBySlug[h]);
-  else if (h === "despre") showView("about");
+  else if (h === "despre" && editMode) showView("about");
   else if (h === "highlights") showView("highlights");
   else if (h === "corectii" && editMode) showView("corrections");
   else if (!h && $("view-stats").hidden) showView("stats");
